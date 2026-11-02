@@ -15,6 +15,12 @@
         let s = Math.min(vw / 1672, vh / 941);
         if (s < 0.8) s = Math.min(vw / 1280, vh / 941, 0.8);
         if (s < 0.62 || vw / vh < 0.95) d.classList.add('compact');
+        try {
+          // Clear permanent localStorage user so entry always defaults to Login screen
+          localStorage.removeItem('motionlab_current_user');
+          const user = sessionStorage.getItem('motionlab_current_user');
+          if (!user) d.classList.add('not-authenticated');
+        } catch (e) {}
       })();
     </script>
     <title>MotionLab · ESP32 3D Motion Studio</title>
@@ -56,6 +62,14 @@
     <link rel="preload" href="/assets/barlow-semi-condensed-latin-700-normal-BpqDG8I9.woff2" as="font" type="font/woff2" crossorigin />
     <!-- Critical Inline Styles for MotionLab ESP32 Studio Loading Screen (First Paint) -->
     <style id="critical-loader-style">
+      html.not-authenticated .loader,
+      body.not-authenticated .loader,
+      html.not-authenticated #loader,
+      body.not-authenticated #loader {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
       .loader {
         position: fixed !important;
         inset: 0 !important;

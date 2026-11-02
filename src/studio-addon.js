@@ -141,9 +141,425 @@ class StudioAddon {
     this.wireGroup = null;
     this.audioCtx = null;
     this.floorMarkMesh = null;
+
+    // Initialize Auth & Session
+    this.initAuth();
+
     this.initUI();
     this.hookIntoApp();
     this.updateWatermarks();
+    this.updateAuthUI();
+    this.checkInitialAuthPrompt();
+  }
+
+  getUserInitials(name) {
+    if (!name) return 'U';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  }
+
+  // ==========================================
+  // Authentication & Member System
+  // ==========================================
+  initAuth() {
+    const savedAccounts = localStorage.getItem('motionlab_accounts');
+    if (!savedAccounts) {
+      this.accounts = [
+        {
+          username: 'panuwich',
+          passwords: ['123456', 'password123', 'panuwich'],
+          name: 'Panuwich',
+          role: 'Lead Developer & Studio Creator',
+          badge: 'DEV',
+          email: 'panuwich@motionlab.local',
+          joined: '28 ต.ค. 2026'
+        },
+        {
+          username: 'student',
+          passwords: ['123456', 'student', 'password123'],
+          name: 'ESP32 Explorer',
+          role: 'IoT Student & Maker',
+          badge: 'MAKER',
+          email: 'student@motionlab.local',
+          joined: '1 พ.ย. 2026'
+        }
+      ];
+      localStorage.setItem('motionlab_accounts', JSON.stringify(this.accounts));
+    } else {
+      try {
+        this.accounts = JSON.parse(savedAccounts);
+      } catch (e) {
+        this.accounts = [];
+      }
+    }
+
+    // Clear old localStorage login so fresh entry always defaults to Login screen
+    localStorage.removeItem('motionlab_current_user');
+
+    let savedUser = sessionStorage.getItem('motionlab_current_user');
+    if (savedUser) {
+      try {
+        this.currentUser = JSON.parse(savedUser);
+      } catch (e) {
+        this.currentUser = null;
+      }
+    } else {
+      this.currentUser = null;
+    }
+
+    this.applyAuthStateClass();
+  }
+
+  applyAuthStateClass() {
+    const app = document.getElementById('app');
+    if (this.currentUser) {
+      document.documentElement.classList.remove('not-authenticated');
+      document.body.classList.remove('not-authenticated');
+      document.documentElement.classList.add('is-authenticated');
+      document.body.classList.add('is-authenticated');
+
+      // CRITICAL FIX 1: Remove inert from #app and all interactive elements so user can click, change tabs, and scroll!
+      if (app) {
+        app.removeAttribute('inert');
+        app.inert = false;
+      }
+      document.querySelectorAll('[inert]').forEach(el => {
+        if (!el.classList.contains('auth-modal-bg')) {
+          el.removeAttribute('inert');
+          el.inert = false;
+        }
+      });
+
+      // Ensure loader is closed
+      document.documentElement.classList.remove('is-loading');
+      const loader = document.getElementById('loader');
+      if (loader) {
+        loader.classList.add('is-done');
+        setTimeout(() => loader.remove(), 120);
+      }
+
+      // CRITICAL FIX 2: Trigger resize and force-fit artboard to full screen!
+      const triggerFit = () => {
+        window.dispatchEvent(new Event('resize'));
+        if (window.__app) {
+          if (window.__app.stage) {
+            window.__app.stage.dirty = true;
+          }
+          if (window.__app.inspector) {
+            window.__app.inspector.sync?.(window.__app.state?.values || {});
+          }
+        }
+      };
+
+      triggerFit();
+      setTimeout(triggerFit, 50);
+      setTimeout(triggerFit, 180);
+      setTimeout(triggerFit, 400);
+    } else {
+      document.documentElement.classList.remove('is-authenticated');
+      document.body.classList.remove('is-authenticated');
+      document.documentElement.classList.add('not-authenticated');
+      document.body.classList.add('not-authenticated');
+      if (app) {
+        app.setAttribute('inert', '');
+        app.inert = true;
+      }
+    }
+  }
+
+  saveAccounts() {
+    localStorage.setItem('motionlab_accounts', JSON.stringify(this.accounts));
+  }
+
+  saveCurrentUser(user, remember = true) {
+    this.currentUser = user;
+    if (user) {
+      sessionStorage.setItem('motionlab_current_user', JSON.stringify(user));
+      if (remember && user.username && user.username !== 'guest') {
+        localStorage.setItem('motionlab_remembered_username', user.username);
+      }
+    } else {
+      sessionStorage.removeItem('motionlab_current_user');
+      localStorage.removeItem('motionlab_current_user');
+    }
+    this.applyAuthStateClass();
+  }
+
+  playLoginChime() {
+    try {
+      if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+      const now = this.audioCtx.currentTime;
+      // High-tech warm harmonic chord: G5 (784Hz) then C6 (1046.5Hz)
+      const osc1 = this.audioCtx.createOscillator();
+      const gain1 = this.audioCtx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(784, now);
+      gain1.gain.setValueAtTime(0.08, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc1.connect(gain1);
+      gain1.connect(this.audioCtx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.35);
+
+      const osc2 = this.audioCtx.createOscillator();
+      const gain2 = this.audioCtx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(1046.5, now + 0.08);
+      gain2.gain.setValueAtTime(0.09, now + 0.08);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      osc2.connect(gain2);
+      gain2.connect(this.audioCtx.destination);
+      osc2.start(now + 0.08);
+      osc2.stop(now + 0.55);
+    } catch (e) {}
+  }
+
+  triggerLoginSuccess(account, remember = true, title = 'เข้าสู่ระบบสำเร็จ') {
+    this.playLoginChime();
+
+    const overlay = document.getElementById('auth-success-overlay');
+    const headline = document.getElementById('success-headline');
+    const subtext = document.getElementById('success-subtext');
+    const card = document.querySelector('.auth-modal-card');
+    const modalBg = document.getElementById('addon-auth-modal-bg');
+
+    if (overlay && headline && subtext && card && modalBg) {
+      headline.textContent = title;
+      subtext.innerHTML = `ยินดีต้อนรับคุณ <b style="color:#ea580c;">${account.name}</b> เข้าสู่สตูดิโอ 3D`;
+      overlay.style.display = 'flex';
+      card.classList.add('is-authenticating');
+
+      // Phase 1: Checkmark draw and glowing pulse
+      setTimeout(() => {
+        card.classList.add('is-dissolving');
+        modalBg.classList.add('is-dissolving');
+      }, 700);
+
+      // Phase 2: Reveal 3D Studio stage with cinematic transition
+      setTimeout(() => {
+        this.saveCurrentUser(account, remember);
+        this.updateAuthUI();
+        this.closeAuthModal();
+
+        overlay.style.display = 'none';
+        card.classList.remove('is-authenticating', 'is-dissolving');
+        modalBg.classList.remove('is-dissolving');
+
+        this.toast(`ยินดีต้อนรับคุณ ${account.name} เข้าสู่ MotionLab ESP32 Studio! ✨`);
+      }, 1000);
+    } else {
+      this.saveCurrentUser(account, remember);
+      this.updateAuthUI();
+      this.closeAuthModal();
+      this.toast(`ยินดีต้อนรับคุณ ${account.name} เข้าสู่ระบบ!`);
+    }
+  }
+
+  login(usernameOrEmail, password, remember = true) {
+    if (!usernameOrEmail || !usernameOrEmail.trim()) {
+      return { success: false, msg: 'กรุณากรอกชื่อผู้ใช้หรืออีเมล' };
+    }
+    if (!password) {
+      return { success: false, msg: 'กรุณากรอกรหัสผ่าน' };
+    }
+
+    const query = usernameOrEmail.trim().toLowerCase();
+    const account = this.accounts.find(a => 
+      a.username.toLowerCase() === query || (a.email && a.email.toLowerCase() === query)
+    );
+
+    if (!account) {
+      return { success: false, msg: 'ไม่พบบัญชีนี้ในระบบ กรุณาตรวจสอบหรือกดสมัครสมาชิกใหม่' };
+    }
+
+    const validPasswords = account.passwords || [account.password];
+    const isMatch = validPasswords.some(p => p === password);
+
+    if (!isMatch) {
+      return { success: false, msg: 'รหัสผ่านไม่ถูกต้อง (สำหรับ Demo บัญชี panuwich รหัสคือ 123456)' };
+    }
+
+    this.triggerLoginSuccess(account, remember, 'เข้าสู่ระบบสำเร็จ');
+    return { success: true, user: account };
+  }
+
+  quickLogin(username) {
+    const acc = this.accounts.find(a => a.username.toLowerCase() === username.toLowerCase());
+    if (acc) {
+      this.triggerLoginSuccess(acc, true, 'เข้าสู่ระบบด่วนสำเร็จ');
+    } else {
+      this.login(username, '123456', true);
+    }
+  }
+
+  register(name, username, email, password) {
+    if (!name || !name.trim()) return { success: false, msg: 'กรุณากรอกชื่อ-นามสกุล หรือชื่อเรียก' };
+    if (!username || !username.trim()) return { success: false, msg: 'กรุณากรอกชื่อผู้ใช้ (Username)' };
+    
+    const cleanUsername = username.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    if (cleanUsername.length < 3) return { success: false, msg: 'ชื่อผู้ใช้ต้องมีอย่างน้อย 3 ตัวอักษร (a-z, 0-9)' };
+    if (!password || password.length < 4) return { success: false, msg: 'รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร' };
+
+    const exists = this.accounts.some(a => a.username.toLowerCase() === cleanUsername);
+    if (exists) return { success: false, msg: `ชื่อผู้ใช้ "${cleanUsername}" มีผู้ใช้งานแล้ว กรุณาเลือกชื่ออื่น` };
+
+    const newAcc = {
+      username: cleanUsername,
+      passwords: [password],
+      name: name.trim(),
+      role: 'ESP32 Maker & Hardware Dev',
+      badge: 'MAKER',
+      email: email ? email.trim() : `${cleanUsername}@motionlab.io`,
+      joined: new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })
+    };
+
+    this.accounts.push(newAcc);
+    this.saveAccounts();
+    this.triggerLoginSuccess(newAcc, true, 'สร้างบัญชีสำเร็จ!');
+    return { success: true, user: newAcc };
+  }
+
+  logout() {
+    const prev = this.currentUser ? this.currentUser.name : '';
+    this.saveCurrentUser(null, false);
+    this.updateAuthUI();
+    this.closeProfileModal();
+    this.openAuthModal('login');
+    this.toast(`ออกจากระบบแล้ว ${prev ? `(ลาก่อนคุณ ${prev})` : ''}`);
+  }
+
+  openAuthModal(defaultTab = 'login') {
+    const modalBg = document.getElementById('addon-auth-modal-bg');
+    if (!modalBg) return;
+
+    this.switchAuthTab(defaultTab);
+    const alertBox = document.getElementById('auth-alert');
+    if (alertBox) alertBox.style.display = 'none';
+
+    modalBg.classList.add('is-open');
+
+    // Pre-fill remembered username if available
+    const remUser = localStorage.getItem('motionlab_remembered_username');
+    const userInput = document.getElementById('auth-login-user');
+    if (userInput && remUser && !userInput.value) {
+      userInput.value = remUser;
+    }
+
+    setTimeout(() => {
+      const input = defaultTab === 'login' 
+        ? (userInput && userInput.value ? document.getElementById('auth-login-pass') : userInput)
+        : document.getElementById('auth-reg-name');
+      if (input) input.focus();
+    }, 150);
+  }
+
+  closeAuthModal() {
+    if (!this.currentUser) return; // Prevent closing if not logged in
+    const modalBg = document.getElementById('addon-auth-modal-bg');
+    if (modalBg) modalBg.classList.remove('is-open');
+    if (window.location.hash === '#login' || window.location.hash === '#register') {
+      try {
+        history.replaceState(null, '', window.location.pathname);
+      } catch (e) {}
+    }
+  }
+
+  switchAuthTab(tab) {
+    const tabLogin = document.getElementById('auth-tab-login');
+    const tabRegister = document.getElementById('auth-tab-register');
+    const formLogin = document.getElementById('auth-form-login');
+    const formRegister = document.getElementById('auth-form-register');
+    const alertBox = document.getElementById('auth-alert');
+    if (alertBox) alertBox.style.display = 'none';
+
+    if (tab === 'login') {
+      tabLogin?.classList.add('is-active');
+      tabRegister?.classList.remove('is-active');
+      if (formLogin) formLogin.style.display = 'flex';
+      if (formRegister) formRegister.style.display = 'none';
+    } else {
+      tabLogin?.classList.remove('is-active');
+      tabRegister?.classList.add('is-active');
+      if (formLogin) formLogin.style.display = 'none';
+      if (formRegister) formRegister.style.display = 'flex';
+    }
+  }
+
+  openProfileModal() {
+    if (!this.currentUser) {
+      this.openAuthModal('login');
+      return;
+    }
+
+    const modalBg = document.getElementById('addon-profile-modal-bg');
+    if (!modalBg) return;
+
+    document.getElementById('prof-avatar').textContent = this.getUserInitials(this.currentUser.name);
+    document.getElementById('prof-name').textContent = this.currentUser.name || 'Member';
+    document.getElementById('prof-role').textContent = `${this.currentUser.role || 'Member'} (@${this.currentUser.username})`;
+    document.getElementById('prof-badge').textContent = `${this.currentUser.badge || 'PRO'} MEMBER`;
+    document.getElementById('prof-stat-parts').textContent = `${this.installed.length} ชิ้น`;
+    document.getElementById('prof-stat-theme').textContent = this.currentTheme.name.split(' ')[0];
+
+    modalBg.classList.add('is-open');
+  }
+
+  closeProfileModal() {
+    const modalBg = document.getElementById('addon-profile-modal-bg');
+    if (!modalBg) return;
+  }
+
+  updateAuthUI() {
+    const slot = document.getElementById('addon-auth-slot');
+    if (!slot) return;
+
+    if (this.currentUser) {
+      slot.innerHTML = `
+        <button class="addon-btn addon-user-pill" id="addon-btn-user" title="คลิกเพื่อดูโปรไฟล์ (@${this.currentUser.username})">
+          <span class="addon-user-avatar">${this.getUserInitials(this.currentUser.name)}</span>
+          <span class="addon-user-name">${this.currentUser.name}</span>
+          <span class="addon-user-badge">${this.currentUser.badge || 'PRO'}</span>
+          <span class="addon-user-online-dot"></span>
+        </button>
+      `;
+      document.getElementById('addon-btn-user')?.addEventListener('click', () => {
+        this.openProfileModal();
+      });
+    } else {
+      slot.innerHTML = `
+        <button class="addon-btn addon-btn-login" id="addon-btn-login" title="เข้าสู่ระบบหรือสมัครสมาชิก">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>เข้าสู่ระบบ</span>
+        </button>
+      `;
+      document.getElementById('addon-btn-login')?.addEventListener('click', () => {
+        this.openAuthModal('login');
+      });
+    }
+  }
+
+  checkInitialAuthPrompt() {
+    if (!this.currentUser) {
+      // First page on entry is always the Login page!
+      const defaultTab = window.location.hash === '#register' ? 'register' : 'login';
+      setTimeout(() => this.openAuthModal(defaultTab), 100);
+    } else if (window.location.hash === '#login') {
+      setTimeout(() => this.openAuthModal('login'), 200);
+    } else if (window.location.hash === '#register') {
+      setTimeout(() => this.openAuthModal('register'), 200);
+    }
+
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash === '#login') {
+        this.openAuthModal('login');
+      } else if (window.location.hash === '#register') {
+        this.openAuthModal('register');
+      }
+    });
   }
 
   toast(msg) {
@@ -200,6 +616,7 @@ class StudioAddon {
       <button class="addon-btn addon-watermark-btn" id="addon-btn-watermark" title="คลิกเพื่อเปลี่ยนชื่อ Dev / ลายน้ำ">
         👨‍💻 <span id="addon-watermark-name">${this.watermark}</span> ✏️
       </button>
+      <div class="addon-auth-slot" id="addon-auth-slot"></div>
     `;
     const appEl = document.getElementById('app') || document.body;
     appEl.appendChild(bar);
@@ -219,7 +636,261 @@ class StudioAddon {
     `;
     document.body.appendChild(modalBg);
 
-    // 3. Installed Components Drawer
+    // 3. User Login & Registration Modal
+    const authModalBg = document.createElement('div');
+    authModalBg.className = 'auth-modal-bg';
+    authModalBg.id = 'addon-auth-modal-bg';
+    authModalBg.innerHTML = `
+      <div class="auth-ambient-glow orb-1"></div>
+      <div class="auth-ambient-glow orb-2"></div>
+      <div class="auth-ambient-glow orb-3"></div>
+
+      <div class="auth-modal-card">
+        <button class="auth-close-btn" id="auth-modal-close" aria-label="ปิด">&times;</button>
+        
+        <!-- Login Success Animation Overlay -->
+        <div class="auth-success-overlay" id="auth-success-overlay" style="display:none;">
+          <div class="success-ring-wrap">
+            <div class="success-pulse-ring"></div>
+            <div class="success-icon-badge">
+              <svg class="success-check-svg" viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline class="success-check-tick" points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <h3 class="success-headline" id="success-headline">เข้าสู่ระบบสำเร็จ</h3>
+          <p class="success-subtext" id="success-subtext">ยินดีต้อนรับสู่ MotionLab ESP32 Studio</p>
+          <div class="success-progress-track">
+            <div class="success-progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="auth-header">
+          <div class="auth-brand-badge">
+            <span class="auth-pill-tag">
+              <span class="auth-pill-dot"></span> STUDIO v2.0 • 3D HARDWARE LAB
+            </span>
+          </div>
+
+          <div class="auth-logo-badge">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="3"/>
+              <rect x="9" y="9" width="6" height="6" fill="#ffffff" fill-opacity="0.35"/>
+              <line x1="9" y1="1" x2="9" y2="4"/>
+              <line x1="15" y1="1" x2="15" y2="4"/>
+              <line x1="9" y1="20" x2="9" y2="23"/>
+              <line x1="15" y1="20" x2="15" y2="23"/>
+              <line x1="20" y1="9" x2="23" y2="9"/>
+              <line x1="20" y1="15" x2="23" y2="15"/>
+              <line x1="1" y1="9" x2="4" y2="9"/>
+              <line x1="1" y1="15" x2="4" y2="15"/>
+            </svg>
+          </div>
+          <h2 class="auth-title">MotionLab <span class="gradient-text">ESP32 Studio</span></h2>
+          <p class="auth-subtitle">ระบบสมาชิกและบันทึกโปรเจกต์ 3D Studio</p>
+        </div>
+
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab is-active" id="auth-tab-login">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span>เข้าสู่ระบบ (Sign In)</span>
+          </button>
+          <button type="button" class="auth-tab" id="auth-tab-register">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>สมัครสมาชิก (Sign Up)</span>
+          </button>
+        </div>
+
+        <!-- Form Error Alert -->
+        <div class="auth-alert" id="auth-alert" style="display:none;"></div>
+
+        <!-- TAB 1: LOGIN -->
+        <form class="auth-form" id="auth-form-login">
+          <div class="auth-field">
+            <label for="auth-login-user">ชื่อผู้ใช้หรืออีเมล (Username / Email)</label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="auth-login-user" placeholder="เช่น panuwich หรือ student" autocomplete="username" required />
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="auth-login-pass">รหัสผ่าน (Password)</label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="auth-login-pass" placeholder="กรอกรหัสผ่านของคุณ" autocomplete="current-password" required />
+              <button type="button" class="auth-eye-btn" id="auth-eye-login" title="ดู/ซ่อนรหัสผ่าน" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-options-row">
+            <label class="auth-checkbox-label">
+              <input type="checkbox" id="auth-login-remember" checked />
+              <span>จดจำฉันไว้ในเครื่องนี้</span>
+            </label>
+            <a href="#" class="auth-link" id="auth-forgot-link">ลืมรหัสผ่าน?</a>
+          </div>
+
+          <button type="submit" class="auth-submit-btn primary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span>เข้าสู่ระบบทันที</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="auth-divider">
+            <span>หรือเข้าสู่ระบบแบบด่วน (1-Click Demo)</span>
+          </div>
+
+          <div class="auth-quick-logins">
+            <button type="button" class="auth-quick-btn dev" id="auth-quick-panuwich">
+              <span class="quick-avatar-pill dev">PW</span>
+              <div class="quick-info">
+                <b>Panuwich</b>
+                <small>Lead Dev (Creator)</small>
+              </div>
+              <span class="quick-badge">DEV</span>
+            </button>
+
+            <button type="button" class="auth-quick-btn student" id="auth-quick-student">
+              <span class="quick-avatar-pill student">EX</span>
+              <div class="quick-info">
+                <b>ESP32 Explorer</b>
+                <small>IoT Student / Maker</small>
+              </div>
+              <span class="quick-badge">DEMO</span>
+            </button>
+          </div>
+
+          <div class="auth-guest-row">
+            <button type="button" class="auth-guest-btn" id="auth-guest-btn">
+              <span>ข้ามไปใช้งานแบบผู้เยี่ยมชม (Guest Mode)</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <div class="auth-security-tag">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Simulated Hardware Environment • Panuwich Edition</span>
+            </div>
+          </div>
+        </form>
+
+        <!-- TAB 2: REGISTER -->
+        <form class="auth-form" id="auth-form-register" style="display:none;">
+          <div class="auth-field">
+            <label for="auth-reg-name">ชื่อ-นามสกุล หรือชื่อเรียกที่ต้องการแสดง</label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </span>
+              <input type="text" id="auth-reg-name" placeholder="เช่น ภานุวิชญ์ หรือ วิศวกรสายฮาร์ดแวร์" required />
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="auth-reg-user">ชื่อผู้ใช้ (Username ภาษาอังกฤษ 3 ตัวขึ้นไป)</label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="auth-reg-user" placeholder="เช่น tonkar293 หรือ maker01" required />
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="auth-reg-email">อีเมล (ถ้ามี)</label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="email" id="auth-reg-email" placeholder="name@example.com" />
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="auth-reg-pass">รหัสผ่าน (อย่างน้อย 4 ตัวอักษร)</label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="auth-reg-pass" placeholder="กำหนดรหัสผ่าน" required />
+              <button type="button" class="auth-eye-btn" id="auth-eye-reg" title="ดู/ซ่อนรหัสผ่าน" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="auth-submit-btn secondary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>สร้างบัญชีและเข้าสู่ระบบทันที</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="auth-guest-row" style="margin-top: 8px;">
+            <button type="button" class="auth-guest-btn" id="auth-back-to-login">
+              มีบัญชีอยู่แล้ว? กดที่นี่เพื่อเข้าสู่ระบบ
+            </button>
+          </div>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(authModalBg);
+
+    // 4. User Profile Card Modal
+    const profileModalBg = document.createElement('div');
+    profileModalBg.className = 'profile-modal-bg';
+    profileModalBg.id = 'addon-profile-modal-bg';
+    profileModalBg.innerHTML = `
+      <div class="profile-modal-card">
+        <button class="auth-close-btn" id="profile-modal-close" aria-label="ปิด">&times;</button>
+        
+        <div class="profile-header">
+          <div class="profile-avatar-wrap">
+            <span class="profile-avatar-initials" id="prof-avatar">PW</span>
+            <span class="profile-status-dot" title="Online"></span>
+          </div>
+          <div class="profile-user-info">
+            <h3 id="prof-name">Panuwich</h3>
+            <p id="prof-role">Lead Developer & Studio Creator</p>
+            <span class="profile-badge-pill" id="prof-badge">DEV PRO</span>
+          </div>
+        </div>
+
+        <div class="profile-stats-grid">
+          <div class="profile-stat-item">
+            <span class="stat-num" id="prof-stat-parts">0 ชิ้น</span>
+            <span class="stat-lbl">อุปกรณ์ที่ต่อ</span>
+          </div>
+          <div class="profile-stat-item">
+            <span class="stat-num" id="prof-stat-theme">Sunshine</span>
+            <span class="stat-lbl">ธีมที่ใช้งาน</span>
+          </div>
+          <div class="profile-stat-item">
+            <span class="stat-num" style="color:#10b981;">Online</span>
+            <span class="stat-lbl">สถานะบัญชี</span>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="profile-action-btn primary" id="prof-sync-watermark-btn">
+            ซิงค์ชื่อนี้เป็นลายน้ำบนบอร์ด 3D
+          </button>
+          <button class="profile-action-btn secondary" id="prof-switch-btn">
+            สลับบัญชี / เปลี่ยนผู้ใช้
+          </button>
+          <button class="profile-action-btn danger" id="prof-logout-btn">
+            ออกจากระบบ (Logout)
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(profileModalBg);
+
+    // 5. Installed Components Drawer
     const drawer = document.createElement('div');
     drawer.className = 'active-parts-panel is-collapsed';
     drawer.id = 'addon-drawer';
@@ -259,7 +930,11 @@ class StudioAddon {
     if (sideCredit) {
       sideCredit.addEventListener('click', (e) => {
         e.preventDefault();
-        this.openWatermarkModal();
+        if (this.currentUser) {
+          this.openProfileModal();
+        } else {
+          this.openAuthModal('login');
+        }
       });
     }
 
@@ -276,6 +951,111 @@ class StudioAddon {
     });
 
     document.getElementById('addon-copy-code').addEventListener('click', () => this.copyGeneratedSketch());
+
+    // Auth modal controls
+    document.getElementById('auth-modal-close')?.addEventListener('click', () => this.closeAuthModal());
+    authModalBg.addEventListener('click', e => {
+      if (e.target === authModalBg) this.closeAuthModal();
+    });
+
+    document.getElementById('auth-tab-login')?.addEventListener('click', () => this.switchAuthTab('login'));
+    document.getElementById('auth-tab-register')?.addEventListener('click', () => this.switchAuthTab('register'));
+    document.getElementById('auth-back-to-login')?.addEventListener('click', () => this.switchAuthTab('login'));
+    document.getElementById('auth-guest-btn')?.addEventListener('click', () => {
+      const guestUser = {
+        username: 'guest',
+        name: 'Guest User',
+        role: 'Guest Explorer',
+        badge: 'GUEST',
+        email: 'guest@motionlab.local',
+        joined: new Date().toLocaleDateString('th-TH')
+      };
+      this.triggerLoginSuccess(guestUser, false, 'ยินดีต้อนรับผู้เยี่ยมชม');
+    });
+
+    // Password show/hide toggles
+    const togglePass = (btnId, inputId) => {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      if (btn && input) {
+        btn.addEventListener('click', () => {
+          const isPass = input.type === 'password';
+          input.type = isPass ? 'text' : 'password';
+          btn.innerHTML = isPass
+            ? `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+            : `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+        });
+      }
+    };
+    togglePass('auth-eye-login', 'auth-login-pass');
+    togglePass('auth-eye-reg', 'auth-reg-pass');
+
+    // Forgot password hint
+    document.getElementById('auth-forgot-link')?.addEventListener('click', e => {
+      e.preventDefault();
+      alert('ข้อมูลบัญชีสำหรับทดสอบ:\n\n• บัญชีผู้พัฒนา: panuwich (รหัสผ่าน: 123456)\n• บัญชีนักเรียน: student (รหัสผ่าน: 123456)\n\nหรือสามารถกดสร้างบัญชีใหม่ได้ทันทีในแท็บ "สมัครสมาชิก"');
+    });
+
+    // 1-Click quick login buttons
+    document.getElementById('auth-quick-panuwich')?.addEventListener('click', () => this.quickLogin('panuwich'));
+    document.getElementById('auth-quick-student')?.addEventListener('click', () => this.quickLogin('student'));
+
+    // Handle Login Submit
+    document.getElementById('auth-form-login')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const userVal = document.getElementById('auth-login-user').value;
+      const passVal = document.getElementById('auth-login-pass').value;
+      const remember = document.getElementById('auth-login-remember').checked;
+      const alertBox = document.getElementById('auth-alert');
+
+      const res = this.login(userVal, passVal, remember);
+      if (!res.success) {
+        if (alertBox) {
+          alertBox.textContent = res.msg;
+          alertBox.style.display = 'flex';
+        }
+      } else {
+        if (alertBox) alertBox.style.display = 'none';
+      }
+    });
+
+    // Handle Register Submit
+    document.getElementById('auth-form-register')?.addEventListener('submit', e => {
+      e.preventDefault();
+      const nameVal = document.getElementById('auth-reg-name').value;
+      const userVal = document.getElementById('auth-reg-user').value;
+      const emailVal = document.getElementById('auth-reg-email').value;
+      const passVal = document.getElementById('auth-reg-pass').value;
+      const alertBox = document.getElementById('auth-alert');
+
+      const res = this.register(nameVal, userVal, emailVal, passVal);
+      if (!res.success) {
+        if (alertBox) {
+          alertBox.textContent = res.msg;
+          alertBox.style.display = 'flex';
+        }
+      } else {
+        if (alertBox) alertBox.style.display = 'none';
+      }
+    });
+
+    // Profile modal controls
+    document.getElementById('profile-modal-close')?.addEventListener('click', () => this.closeProfileModal());
+    profileModalBg.addEventListener('click', e => {
+      if (e.target === profileModalBg) this.closeProfileModal();
+    });
+
+    document.getElementById('prof-logout-btn')?.addEventListener('click', () => this.logout());
+    document.getElementById('prof-switch-btn')?.addEventListener('click', () => {
+      this.closeProfileModal();
+      this.openAuthModal('login');
+    });
+    document.getElementById('prof-sync-watermark-btn')?.addEventListener('click', () => {
+      if (this.currentUser) {
+        this.setWatermark(this.currentUser.name);
+        this.closeProfileModal();
+      }
+    });
   }
 
   closeModal() {
