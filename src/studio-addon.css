@@ -1419,12 +1419,14 @@ header.brand {
   padding: 16px;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none !important;
   transition: all 0.25s ease;
 }
 
 .addon-modal-bg.is-open {
-  opacity: 1;
-  visibility: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 .addon-modal {
