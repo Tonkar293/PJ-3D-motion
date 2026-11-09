@@ -1006,6 +1006,13 @@ class StudioAddon {
       });
     }
 
+    // Sidebar Home click notification
+    document.querySelectorAll('[data-nav="home"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.toast('กลับสู่หน้าแรก (บทที่ 1: Meet the ESP32) และรีเซ็ตมุมมอง 3D ✨');
+      });
+    });
+
     document.getElementById('addon-btn-parts').addEventListener('click', () => {
       drawer.classList.toggle('is-collapsed');
     });
