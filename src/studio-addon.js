@@ -1810,12 +1810,13 @@ class StudioAddon {
     const id = `${comp.id}_${Date.now()}`;
     const offsetIndex = this.installed.length;
     
-    // Placement calculation: places items cleanly on the desk to the right of the ESP32 board
+    // Placement calculation: places items cleanly on the desk directly beside the ESP32 board
+    // Alternate right (+19) and left (-19) directly beside the breadboard inside the visible camera viewport
     const col = offsetIndex % 2;
     const row = Math.floor(offsetIndex / 2);
-    const posX = 24 + col * 18;
+    const posX = col === 0 ? 19 : -19;
     const posY = -3.8;
-    const posZ = -12 + row * 18;
+    const posZ = -6 + row * 13;
 
     let innerMesh = null;
     let state = { isOn: true, val: 0 };
@@ -1916,9 +1917,10 @@ class StudioAddon {
 
     this.wireGroup.add(meshObj);
 
-    // Target pin on ESP32 right pin header
-    const targetPinZ = Math.max(-20, Math.min(20, -14 + (offsetIndex % 8) * 4));
-    const targetPin = new THREE.Vector3(13.8, 1.4, targetPinZ);
+    // Target pin on ESP32 header (connects left or right header based on component placement)
+    const targetPinX = posX > 0 ? 11.5 : -11.5;
+    const targetPinZ = Math.max(-18, Math.min(18, -10 + (offsetIndex % 6) * 5));
+    const targetPin = new THREE.Vector3(targetPinX, 0.4, targetPinZ);
     const wire = this.createJumperWire(new THREE.Vector3(posX, posY + 1.2, posZ), targetPin);
     this.wireGroup.add(wire);
 
@@ -1938,11 +1940,19 @@ class StudioAddon {
       stage.parts.set(id, { group: meshObj, name: comp.name, desc: comp.desc });
     }
 
+    if (stage.controls?.view) {
+      if (stage.controls.view.zoom > 7.5) {
+        stage.controls.view.zoom = 7.2;
+      }
+      stage.controls.touch?.();
+    }
+
     stage.dirty = true;
     stage.shadowDirty = true;
     if (stage.renderer?.shadowMap) {
       stage.renderer.shadowMap.needsUpdate = true;
     }
+    stage.render?.();
 
     this.updateInstalledListUI();
     document.getElementById('addon-drawer')?.classList.remove('is-collapsed');
@@ -1951,12 +1961,13 @@ class StudioAddon {
 
   createJumperWire(from, to) {
     const mid = from.clone().lerp(to, 0.5);
-    mid.y += 12;
-    const curve = new THREE.CatmullRomCurve3([from.clone().add({x:0, y:1, z:0}), mid, to]);
-    const geo = new THREE.TubeGeometry(curve, 32, 0.35, 6, false);
-    const colors = [0xff6b4a, 0x0284c7, 0x10b981, 0xf59e0b, 0x8b5cf6];
+    mid.y += 10;
+    const start = from.clone().add(new THREE.Vector3(0, 1.2, 0));
+    const curve = new THREE.CatmullRomCurve3([start, mid, to.clone()]);
+    const geo = new THREE.TubeGeometry(curve, 32, 0.38, 8, false);
+    const colors = [0xff6b4a, 0x0284c7, 0x10b981, 0xf59e0b, 0xa855f7];
     const col = colors[this.installed.length % colors.length];
-    const mat = new THREE.MeshStandardMaterial({ color: col, roughness: 0.35 });
+    const mat = new THREE.MeshStandardMaterial({ color: col, roughness: 0.35, metalness: 0.1 });
     return new THREE.Mesh(geo, mat);
   }
 
@@ -1967,7 +1978,12 @@ class StudioAddon {
       this.wireGroup.remove(item.meshObj);
       this.wireGroup.remove(item.wire);
       this.installed.splice(idx, 1);
-      window.__app?.stage && (window.__app.stage.dirty = true);
+      const stage = window.__app?.stage;
+      if (stage) {
+        stage.dirty = true;
+        stage.shadowDirty = true;
+        stage.render?.();
+      }
       this.updateInstalledListUI();
       this.toast(`ลบ ${item.comp.name} เรียบร้อย 🗑️`);
     }
@@ -2040,7 +2056,11 @@ class StudioAddon {
           if (target && target.set) {
             target.set(item.state.isOn ? 1 : 0);
           }
-          window.__app?.stage && (window.__app.stage.dirty = true);
+          const stage = window.__app?.stage;
+          if (stage) {
+            stage.dirty = true;
+            stage.render?.();
+          }
           this.updateInstalledListUI();
         }
       });
@@ -2063,7 +2083,11 @@ class StudioAddon {
           target?.set && target.set(deg);
           const valEl = r.parentNode.querySelector('.servo-val');
           if (valEl) valEl.textContent = `${deg}°`;
-          window.__app?.stage && (window.__app.stage.dirty = true);
+          const stage = window.__app?.stage;
+          if (stage) {
+            stage.dirty = true;
+            stage.render?.();
+          }
         }
       });
     });
