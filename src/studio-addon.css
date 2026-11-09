@@ -2115,7 +2115,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .auth-cockpit-layout {
   display: flex;
   width: 100%;
-  min-height: 620px;
+  min-height: 650px;
   max-height: 92vh;
 }
 
@@ -2232,11 +2232,11 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 
 .esp-module-frame {
   position: relative;
-  width: 296px;
+  width: 304px;
   background: #090c14;
   border: 2px solid #1e293b;
   border-radius: 16px;
-  padding: 14px 12px 12px;
+  padding: 12px 10px 10px;
   box-shadow: 
     0 18px 40px -10px rgba(0, 0, 0, 0.7),
     0 0 35px rgba(249, 115, 22, 0.12),
@@ -2246,10 +2246,10 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .esp-antenna-block {
   position: relative;
   width: 100%;
-  height: 38px;
+  height: 36px;
   background: #0d121e;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2288,59 +2288,69 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   100% { transform: translateY(-50%) scale(3.5); opacity: 0; }
 }
 
-/* Module Core: Flanked Pin Banks + Centered Metal Shield */
+/* Elongated Module Core: 30-Pin Flanked Banks + Center Architecture */
 .esp-module-core {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  gap: 7px;
-  margin-bottom: 10px;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .esp-pin-bank {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 140px;
+  height: 238px;
   flex-shrink: 0;
-  padding: 2px 0;
+  padding: 1px 0;
 }
 
 .pin-item {
   display: flex;
   align-items: center;
-  gap: 4px;
-  height: 14px;
+  gap: 3.5px;
+  height: 12px;
 }
 
 .pin-name {
   font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 700;
   color: #f59e0b;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   line-height: 1;
   user-select: none;
 }
 
 .pins-left .pin-name {
   text-align: right;
-  min-width: 20px;
+  min-width: 22px;
 }
 
 .pins-right .pin-name {
   text-align: left;
-  min-width: 20px;
+  min-width: 22px;
 }
 
 /* Authentic Golden Castellated Solder Pad */
 .pin-pad {
   width: 6px;
-  height: 5px;
+  height: 4.5px;
   background: linear-gradient(135deg, #fbbf24 0%, #d97706 70%, #92400e 100%);
-  border-radius: 1.5px;
+  border-radius: 1.2px;
   box-shadow: 0 0 3px rgba(245, 158, 11, 0.5);
   flex-shrink: 0;
+}
+
+/* Center Board Architecture (Metal Shield + Sub ICs + Tactile IO) */
+.esp-center-deck {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 .esp-metal-shield {
@@ -2348,48 +2358,48 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   background: linear-gradient(145deg, #1e283b 0%, #131a29 55%, #25334c 100%);
   border: 1.5px solid #334155;
   border-radius: 9px;
-  padding: 10px 8px;
+  padding: 8px 8px 6px;
   color: #e2e8f0;
   text-align: center;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.4);
-  height: 140px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 128px;
 }
 
 .shield-watermark-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 8px;
+  font-size: 7.5px;
   color: #94a3b8;
   font-weight: 800;
   letter-spacing: 0.5px;
 }
 
 .shield-model {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.5px;
   color: #ffffff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .shield-spec {
-  font-size: 8.5px;
+  font-size: 8px;
   color: #94a3b8;
   font-weight: 600;
   margin-top: 1px;
 }
 
 .shield-ic-visual {
-  margin-top: 6px;
+  margin-top: 4px;
   background: #090c14;
   border: 1px solid #334155;
   border-radius: 6px;
-  padding: 5px 8px;
+  padding: 4px 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2398,26 +2408,126 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .ic-die {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
 }
 
 .ic-title {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
   color: #f97316;
   letter-spacing: 0.5px;
 }
 
 .ic-freq {
-  font-size: 9px;
+  font-size: 8.5px;
   color: #38bdf8;
   font-weight: 700;
+}
+
+/* Onboard Regulators & USB Interface ICs */
+.esp-sub-ics-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.mini-ic {
+  background: #0d121e;
+  border: 1px solid #1e293b;
+  border-radius: 4px;
+  padding: 3px 6px;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  flex: 1;
+}
+
+.mini-ic-label {
+  font-size: 8px;
+  font-weight: 800;
+  color: #f97316;
+  font-family: 'SF Mono', Consolas, monospace;
+  display: block;
+  line-height: 1.1;
+}
+
+.mini-ic-sub {
+  font-size: 6.5px;
+  color: #64748b;
+  font-weight: 600;
+  display: block;
+  line-height: 1.1;
+}
+
+/* Tactile Buttons & USB-C IO Deck */
+.esp-bottom-io-deck {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  background: #080c14;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+}
+
+.hw-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.btn-cap {
+  width: 9px;
+  height: 9px;
+  background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+  border-radius: 2px;
+  border: 1px solid #94a3b8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-lbl {
+  font-size: 7px;
+  font-weight: 800;
+  color: #94a3b8;
+  font-family: 'SF Mono', Consolas, monospace;
+}
+
+.hw-usbc-port {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.usbc-metal-rim {
+  width: 26px;
+  height: 9px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.usbc-slot {
+  width: 16px;
+  height: 2.5px;
+  background: #090c14;
+  border-radius: 1px;
+}
+
+.usbc-text {
+  font-size: 6.5px;
+  font-weight: 800;
+  color: #64748b;
+  font-family: 'SF Mono', Consolas, monospace;
 }
 
 .esp-indicators-bar {
   display: flex;
   justify-content: space-around;
-  padding: 6px 4px;
+  padding: 5px 4px;
   background: #0d121e;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.06);

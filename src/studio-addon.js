@@ -788,9 +788,9 @@ class StudioAddon {
                   <div class="antenna-rf-pulse pulse-ring-2"></div>
                 </div>
 
-                <!-- Module Core Body: Left Castellated Pins, Metal Shield, Right Castellated Pins -->
+                <!-- Elongated ESP32 DevKit Board Structure (30-Pin Standard) -->
                 <div class="esp-module-core">
-                  <!-- Left Castellated Pin Bank -->
+                  <!-- Left Castellated Pin Bank (15 Pins) -->
                   <div class="esp-pin-bank pins-left">
                     <div class="pin-item"><span class="pin-name">3V3</span><span class="pin-pad"></span></div>
                     <div class="pin-item"><span class="pin-name">EN</span><span class="pin-pad"></span></div>
@@ -800,34 +800,81 @@ class StudioAddon {
                     <div class="pin-item"><span class="pin-name">D35</span><span class="pin-pad"></span></div>
                     <div class="pin-item"><span class="pin-name">D32</span><span class="pin-pad"></span></div>
                     <div class="pin-item"><span class="pin-name">D33</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D25</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D26</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D27</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D14</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D12</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D13</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">GND</span><span class="pin-pad"></span></div>
                   </div>
 
-                  <!-- Brushed Metal RF Shield -->
-                  <div class="esp-metal-shield">
-                    <div class="shield-watermark-row">
-                      <span class="shield-brand">ESPRESSIF</span>
-                      <span class="shield-ce">CE · RoHS · FCC</span>
+                  <!-- Center Board Architecture -->
+                  <div class="esp-center-deck">
+                    <!-- Brushed Metal RF Shield -->
+                    <div class="esp-metal-shield">
+                      <div class="shield-watermark-row">
+                        <span class="shield-brand">ESPRESSIF</span>
+                        <span class="shield-ce">CE · RoHS · FCC</span>
+                      </div>
+                      <div class="shield-model">ESP32-WROOM-32</div>
+                      <div class="shield-spec">Wi-Fi &amp; Bluetooth Dual-Core MCU</div>
+                      <div class="shield-ic-visual">
+                        <div class="ic-die">
+                          <span class="ic-title">XTENSA LX6</span>
+                          <span class="ic-freq">240 MHz</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="shield-model">ESP32-WROOM-32</div>
-                    <div class="shield-spec">Wi-Fi &amp; Bluetooth Dual-Core MCU</div>
-                    <div class="shield-ic-visual">
-                      <div class="ic-die">
-                        <span class="ic-title">XTENSA LX6</span>
-                        <span class="ic-freq">240 MHz</span>
+
+                    <!-- Onboard Regulator & Interface IC Visual -->
+                    <div class="esp-sub-ics-row">
+                      <div class="mini-ic ams-chip">
+                        <span class="mini-ic-label">AMS1117</span>
+                        <span class="mini-ic-sub">3.3V LDO</span>
+                      </div>
+                      <div class="mini-ic cp-chip">
+                        <span class="mini-ic-label">CP2102</span>
+                        <span class="mini-ic-sub">UART BUS</span>
+                      </div>
+                    </div>
+
+                    <!-- Physical Tactile Buttons & USB-C Interface Deck -->
+                    <div class="esp-bottom-io-deck">
+                      <div class="hw-btn hw-btn-en">
+                        <span class="btn-cap"></span>
+                        <span class="btn-lbl">EN</span>
+                      </div>
+                      <div class="hw-usbc-port">
+                        <div class="usbc-metal-rim">
+                          <div class="usbc-slot"></div>
+                        </div>
+                        <span class="usbc-text">USB-C</span>
+                      </div>
+                      <div class="hw-btn hw-btn-boot">
+                        <span class="btn-cap"></span>
+                        <span class="btn-lbl">BOOT</span>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Right Castellated Pin Bank -->
+                  <!-- Right Castellated Pin Bank (15 Pins) -->
                   <div class="esp-pin-bank pins-right">
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">VIN</span></div>
                     <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">GND</span></div>
                     <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D23</span></div>
                     <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D22</span></div>
-                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">TX</span></div>
-                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">RX</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">TX0</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">RX0</span></div>
                     <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D21</span></div>
                     <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D19</span></div>
                     <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D18</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D5</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D4</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D2</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D15</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">SD2</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">CLK</span></div>
                   </div>
                 </div>
 
