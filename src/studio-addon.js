@@ -422,6 +422,7 @@ class StudioAddon {
         this.saveCurrentUser(account, remember);
         this.updateAuthUI();
         this.closeAuthModal();
+        this.closeProfileModal();
 
         overlay.style.display = 'none';
         card.classList.remove('is-authenticating', 'is-dissolving');
@@ -593,6 +594,8 @@ class StudioAddon {
     if (!this.currentUser) return; // Prevent closing if not logged in
     const modalBg = document.getElementById('addon-auth-modal-bg');
     if (modalBg) modalBg.classList.remove('is-open');
+    const profModalBg = document.getElementById('addon-profile-modal-bg');
+    if (profModalBg) profModalBg.classList.remove('is-open');
     if (window.location.hash === '#login' || window.location.hash === '#register') {
       try {
         history.replaceState(null, '', window.location.pathname);
@@ -630,10 +633,13 @@ class StudioAddon {
     const modalBg = document.getElementById('addon-profile-modal-bg');
     if (!modalBg) return;
 
+    const isGuest = this.currentUser.username === 'guest';
     document.getElementById('prof-avatar').textContent = this.getUserInitials(this.currentUser.name);
     document.getElementById('prof-name').textContent = this.currentUser.name || 'Member';
-    document.getElementById('prof-role').textContent = `${this.currentUser.role || 'Member'} (@${this.currentUser.username})`;
-    document.getElementById('prof-badge').textContent = `${this.currentUser.badge || 'PRO'} MEMBER`;
+    document.getElementById('prof-role').textContent = isGuest 
+      ? 'ผู้เยี่ยมชมสตูดิโอ (Guest Mode)' 
+      : `${this.currentUser.role || 'Member'} (@${this.currentUser.username})`;
+    document.getElementById('prof-badge').textContent = `${this.currentUser.badge || (isGuest ? 'GUEST' : 'PRO')} MEMBER`;
     document.getElementById('prof-stat-parts').textContent = `${this.installed.length} ชิ้น`;
     document.getElementById('prof-stat-theme').textContent = this.currentTheme.name.split(' ')[0];
 
@@ -642,7 +648,9 @@ class StudioAddon {
 
   closeProfileModal() {
     const modalBg = document.getElementById('addon-profile-modal-bg');
-    if (!modalBg) return;
+    if (modalBg) {
+      modalBg.classList.remove('is-open');
+    }
   }
 
   updateAuthUI() {
