@@ -192,9 +192,9 @@ html:not(.compact) header.brand {
   left: 16px !important;
   height: 56px !important;
   width: 285px !important;
-  padding: 8px 14px !important;
+  padding: 6px 14px !important;
   border-radius: 20px !important;
-  background: rgba(255, 255, 255, 0.94) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
   border: 1.5px solid rgba(255, 107, 74, 0.28) !important;
   box-shadow: 0 8px 24px -4px rgba(255, 107, 74, 0.12) !important;
   backdrop-filter: blur(16px) !important;
@@ -203,6 +203,46 @@ html:not(.compact) header.brand {
   gap: 10px !important;
   z-index: 100 !important;
   box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+html:not(.compact) .brand-logo {
+  width: 44px !important;
+  height: 35px !important;
+  flex-shrink: 0 !important;
+}
+
+html:not(.compact) .brand-text {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  gap: 1px !important;
+}
+
+html:not(.compact) .brand-text h1 {
+  font-size: 17px !important;
+  line-height: 1.15 !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+}
+
+html:not(.compact) .brand-text p {
+  color: #ea580c !important;
+  font-size: 9.5px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 html:not(.compact) .addon-topbar {
@@ -1221,27 +1261,44 @@ html.compact .flyout {
 
 /* Redesign the brand header into a sleek modern studio bar */
 header.brand {
-  background: rgba(255, 255, 255, 0.94) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
   border: 1.5px solid rgba(255, 107, 74, 0.28) !important;
   border-radius: 20px !important;
-  padding: 10px 18px !important;
+  padding: 6px 14px !important;
   box-shadow: 0 10px 25px -6px rgba(255, 107, 74, 0.15), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
   backdrop-filter: blur(16px) !important;
   display: flex !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 10px !important;
   grid-area: brand !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
 }
 
 .brand-logo {
+  width: 44px !important;
+  height: 35px !important;
+  flex-shrink: 0 !important;
   filter: drop-shadow(0 2px 8px rgba(255, 107, 74, 0.4)) !important;
 }
 
+.brand-text {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  gap: 1px !important;
+}
+
 .brand-text h1 {
-  font-size: 22px !important;
+  font-size: 17px !important;
+  line-height: 1.15 !important;
   font-weight: 800 !important;
   color: #0f172a !important;
   letter-spacing: -0.02em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
 }
 
 .brand-text h1 span {
@@ -1252,14 +1309,22 @@ header.brand {
 }
 
 .brand-text p {
-  color: #64748b !important;
-  font-size: 11.5px !important;
-  font-weight: 600 !important;
+  color: #ea580c !important;
+  font-size: 9.5px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .brand-owner {
   color: #ea580c !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
 }
 
 /* Top Studio Action Bar Buttons */
