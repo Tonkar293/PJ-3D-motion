@@ -1314,11 +1314,10 @@ class StudioAddon {
             btn.addEventListener('click', (e) => {
               e.stopPropagation();
               const compId = btn.dataset.compId;
-              const lessonId = btn.dataset.lessonId;
               const comp = COMPONENT_CATALOG.find(c => c.id === compId);
-              if (lessonId && window.__app?.selectLesson) {
-                window.__app.selectLesson(lessonId);
-                this.toast(`กำลังโหลดวงจร 3D: ${comp ? comp.name : compId} พร้อมสายไฟและโค้ดตัวอย่าง! 🚀`);
+              if (comp) {
+                this.addComponentToScene(comp);
+                document.getElementById('addon-drawer')?.classList.remove('is-collapsed');
               }
             });
           });
@@ -1786,13 +1785,8 @@ class StudioAddon {
         const comp = COMPONENT_CATALOG.find(c => c.id === card.dataset.compId);
         if (comp) {
           this.closeModal();
-          if (comp.lessonId && window.__app?.selectLesson) {
-            window.__app.selectLesson(comp.lessonId);
-            this.toast(`กำลังโหลดวงจร 3D: ${comp.name} พร้อมสายไฟ Breadboard และโค้ดตัวอย่าง! 🚀`);
-          } else {
-            this.addComponentToScene(comp);
-            document.getElementById('addon-drawer').classList.remove('is-collapsed');
-          }
+          this.addComponentToScene(comp);
+          document.getElementById('addon-drawer')?.classList.remove('is-collapsed');
         }
       });
     });
@@ -1807,7 +1801,7 @@ class StudioAddon {
       return;
     }
 
-    if (!this.wireGroup) {
+    if (!this.wireGroup || this.wireGroup.parent !== stage.scene) {
       this.wireGroup = new THREE.Group();
       this.wireGroup.name = 'user-addon-group';
       stage.scene.add(this.wireGroup);
@@ -1815,78 +1809,117 @@ class StudioAddon {
 
     const id = `${comp.id}_${Date.now()}`;
     const offsetIndex = this.installed.length;
-    // Calculate 3D placement next to ESP32 board on visible table surface
-    const posX = 16 + (offsetIndex % 3) * 12;
+    
+    // Placement calculation: places items cleanly on the desk to the right of the ESP32 board
+    const col = offsetIndex % 2;
+    const row = Math.floor(offsetIndex / 2);
+    const posX = 24 + col * 18;
     const posY = -3.8;
-    const posZ = 2 + Math.floor(offsetIndex / 3) * 10;
+    const posZ = -12 + row * 18;
 
-    let meshObj = null;
-    let state = { isOn: false, val: 0 };
+    let innerMesh = null;
+    let state = { isOn: true, val: 0 };
 
     switch (comp.id) {
       case 'led': {
         const colors = [0xff2d4a, 0x2dff7a, 0x2d8cff, 0xffc21a, 0xffffff];
-        const col = colors[offsetIndex % colors.length];
-        meshObj = parts.led(col);
-        meshObj.position.set(posX, posY, posZ);
+        const colVal = colors[offsetIndex % colors.length];
+        innerMesh = parts.led(colVal);
+        innerMesh.scale.set(1.5, 1.5, 1.5);
+        innerMesh.set(1);
         break;
       }
       case 'rgb': {
-        meshObj = parts.rgbLamp();
-        meshObj.position.set(posX, posY, posZ);
-        meshObj.scale.set(0.7, 0.7, 0.7);
+        innerMesh = parts.rgbLamp();
+        innerMesh.scale.set(0.9, 0.9, 0.9);
+        innerMesh.set(1, 0.3, 0.9);
         break;
       }
       case 'button': {
-        meshObj = parts.button();
-        meshObj.position.set(posX, posY, posZ);
+        innerMesh = parts.button();
+        innerMesh.scale.set(1.4, 1.4, 1.4);
         break;
       }
       case 'servo': {
-        meshObj = parts.servo();
-        meshObj.position.set(posX, posY, posZ);
-        meshObj.scale.set(0.85, 0.85, 0.85);
+        innerMesh = parts.servo();
+        innerMesh.scale.set(0.9, 0.9, 0.9);
         state.val = 90;
-        meshObj.set(90);
+        innerMesh.set(90);
         break;
       }
       case 'hcsr04': {
-        meshObj = parts.hcsr04();
-        meshObj.position.set(posX, posY, posZ);
+        innerMesh = parts.hcsr04();
+        innerMesh.scale.set(1.1, 1.1, 1.1);
         state.val = 30;
         break;
       }
       case 'ldr': {
-        meshObj = parts.ldr();
-        meshObj.position.set(posX, posY, posZ);
+        innerMesh = parts.ldr();
+        innerMesh.scale.set(1.4, 1.4, 1.4);
         break;
       }
       case 'oled': {
-        meshObj = parts.display();
-        meshObj.position.set(posX, posY + 6, posZ);
-        meshObj.set('ESP32', 'READY');
+        innerMesh = parts.display();
+        innerMesh.scale.set(0.85, 0.85, 0.85);
+        innerMesh.position.y = 5;
+        innerMesh.set('ESP32', 'ONLINE', 0.85);
         break;
       }
       case 'buzzer': {
-        meshObj = new THREE.Group();
+        innerMesh = new THREE.Group();
         const bz = new THREE.Mesh(new THREE.CylinderGeometry(4.5, 4.5, 5, 24), new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5 }));
         bz.position.y = 2.5;
         const bzTop = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.4, 16), new THREE.MeshStandardMaterial({ color: 0x333333 }));
         bzTop.position.y = 5.2;
-        meshObj.add(bz, bzTop);
-        meshObj.position.set(posX, posY, posZ);
+        innerMesh.add(bz, bzTop);
+        break;
+      }
+      case 'potentiometer': {
+        innerMesh = new THREE.Group();
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 3, 24), new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.4 }));
+        base.position.y = 1.5;
+        const knob = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.8, 5, 24), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 }));
+        knob.position.y = 5;
+        const pointer = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4.8, 1.5), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+        pointer.position.set(0, 5, 2.5);
+        innerMesh.add(base, knob, pointer);
+        break;
+      }
+      case 'dcmotor': {
+        innerMesh = new THREE.Group();
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(4, 4, 10, 24), new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8, roughness: 0.2 }));
+        body.rotation.z = Math.PI / 2;
+        body.position.y = 4.2;
+        const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 15, 12), new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.9 }));
+        shaft.rotation.z = Math.PI / 2;
+        shaft.position.y = 4.2;
+        innerMesh.add(body, shaft);
         break;
       }
       default: {
-        meshObj = parts.led();
-        meshObj.position.set(posX, posY, posZ);
+        innerMesh = parts.led();
+        innerMesh.scale.set(1.5, 1.5, 1.5);
       }
     }
 
+    // Assembly group with breakout base plate
+    const meshObj = new THREE.Group();
+    const basePlate = new THREE.Mesh(
+      new THREE.BoxGeometry(14, 0.6, 14),
+      new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.5, metalness: 0.3 })
+    );
+    basePlate.position.set(0, 0.3, 0);
+    meshObj.add(basePlate);
+    meshObj.add(innerMesh);
+    meshObj.position.set(posX, posY, posZ);
+    meshObj.inner = innerMesh;
+
     this.wireGroup.add(meshObj);
 
-    // Create 3D jumper wire to ESP32 board
-    const wire = this.createJumperWire(meshObj.position, new THREE.Vector3(0, 0, 8));
+    // Target pin on ESP32 right pin header
+    const targetPinZ = Math.max(-20, Math.min(20, -14 + (offsetIndex % 8) * 4));
+    const targetPin = new THREE.Vector3(13.8, 1.4, targetPinZ);
+    const wire = this.createJumperWire(new THREE.Vector3(posX, posY + 1.2, posZ), targetPin);
     this.wireGroup.add(wire);
 
     const instance = {
@@ -1899,12 +1932,21 @@ class StudioAddon {
     };
 
     this.installed.push(instance);
-    stage.dirty = true;
-    if (stage.controls && stage.controls.focusPoint) {
-      stage.controls.focusPoint(new THREE.Vector3(posX, posY, posZ));
+
+    // Register in stage.parts for hover & click
+    if (stage.parts && stage.parts.set) {
+      stage.parts.set(id, { group: meshObj, name: comp.name, desc: comp.desc });
     }
+
+    stage.dirty = true;
+    stage.shadowDirty = true;
+    if (stage.renderer?.shadowMap) {
+      stage.renderer.shadowMap.needsUpdate = true;
+    }
+
     this.updateInstalledListUI();
-    this.toast(`เพิ่ม ${comp.name} สำเร็จ! ✨`);
+    document.getElementById('addon-drawer')?.classList.remove('is-collapsed');
+    this.toast(`เพิ่ม ${comp.name} ลงบนบอร์ด 3D ในหน้านี้แล้ว! ✨`);
   }
 
   createJumperWire(from, to) {
@@ -1994,8 +2036,9 @@ class StudioAddon {
         const item = this.installed.find(i => i.id === b.dataset.toggleId);
         if (item) {
           item.state.isOn = !item.state.isOn;
-          if (item.meshObj.set) {
-            item.meshObj.set(item.state.isOn ? 1 : 0);
+          const target = item.meshObj.inner || item.meshObj;
+          if (target && target.set) {
+            target.set(item.state.isOn ? 1 : 0);
           }
           window.__app?.stage && (window.__app.stage.dirty = true);
           this.updateInstalledListUI();
@@ -2016,7 +2059,8 @@ class StudioAddon {
         if (item) {
           const deg = Number(e.target.value);
           item.state.val = deg;
-          item.meshObj.set && item.meshObj.set(deg);
+          const target = item.meshObj.inner || item.meshObj;
+          target?.set && target.set(deg);
           const valEl = r.parentNode.querySelector('.servo-val');
           if (valEl) valEl.textContent = `${deg}°`;
           window.__app?.stage && (window.__app.stage.dirty = true);
