@@ -755,6 +755,19 @@ class StudioAddon {
           <!-- LEFT CHAMBER: Interactive Hardware Showcase Deck -->
           <div class="auth-showcase-chamber">
             <div class="showcase-glow-radial"></div>
+
+            <!-- Background Animated PCB Copper Circuit Traces -->
+            <svg class="showcase-pcb-traces" viewBox="0 0 380 560" preserveAspectRatio="none">
+              <path class="pcb-line" d="M -20,60 L 70,60 L 110,100 L 110,220" />
+              <path class="pcb-line" d="M 400,90 L 310,90 L 270,130 L 270,250" />
+              <path class="pcb-line" d="M -20,380 L 80,380 L 120,420 L 240,420 L 280,460 L 400,460" />
+              <path class="pcb-line pulse-line" d="M 400,280 L 330,280 L 290,320 L 180,320 L 140,360 L -20,360" />
+              <circle class="pcb-node" cx="70" cy="60" r="3.5" />
+              <circle class="pcb-node" cx="110" cy="100" r="3" />
+              <circle class="pcb-node" cx="310" cy="90" r="3.5" />
+              <circle class="pcb-node" cx="80" cy="380" r="3.5" />
+              <circle class="pcb-node" cx="280" cy="460" r="3.5" />
+            </svg>
             
             <div class="showcase-top-meta">
               <span class="showcase-chip-badge">
@@ -766,44 +779,80 @@ class StudioAddon {
             <!-- ESP32 Interactive Module Visualizer -->
             <div class="esp-visual-deck">
               <div class="esp-module-frame">
-                <!-- Golden Copper Antenna with RF Waves -->
+                <!-- Golden Copper Antenna with Dual RF Beacon Pulses -->
                 <div class="esp-antenna-block">
-                  <svg class="esp-antenna-svg" viewBox="0 0 140 34" fill="none">
-                    <path d="M 10 30 L 10 8 L 28 8 L 28 26 L 46 26 L 46 8 L 64 8 L 64 26 L 82 26 L 82 8 L 100 8 L 100 26 L 118 26 L 118 8 L 132 8" stroke="#f59e0b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="esp-antenna-svg" viewBox="0 0 160 34" fill="none">
+                    <path d="M 12 30 L 12 7 L 32 7 L 32 25 L 52 25 L 52 7 L 72 7 L 72 25 L 92 25 L 92 7 L 112 7 L 112 25 L 132 25 L 132 7 L 148 7" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  <div class="antenna-rf-pulse"></div>
+                  <div class="antenna-rf-pulse pulse-ring-1"></div>
+                  <div class="antenna-rf-pulse pulse-ring-2"></div>
                 </div>
 
-                <!-- Brushed Metal RF Shield -->
-                <div class="esp-metal-shield">
-                  <div class="shield-watermark-row">
-                    <span class="shield-brand">ESPRESSIF</span>
-                    <span class="shield-ce">CE · RoHS · FCC</span>
+                <!-- Module Core Body: Left Castellated Pins, Metal Shield, Right Castellated Pins -->
+                <div class="esp-module-core">
+                  <!-- Left Castellated Pin Bank -->
+                  <div class="esp-pin-bank pins-left">
+                    <div class="pin-item"><span class="pin-name">3V3</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">EN</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">VP</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">VN</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D34</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D35</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D32</span><span class="pin-pad"></span></div>
+                    <div class="pin-item"><span class="pin-name">D33</span><span class="pin-pad"></span></div>
                   </div>
-                  <div class="shield-model">ESP32-WROOM-32</div>
-                  <div class="shield-spec">Wi-Fi &amp; Bluetooth Dual-Core MCU</div>
-                  <div class="shield-ic-visual">
-                    <div class="ic-die">
-                      <span class="ic-title">XTENSA LX6</span>
-                      <span class="ic-freq">240 MHz</span>
+
+                  <!-- Brushed Metal RF Shield -->
+                  <div class="esp-metal-shield">
+                    <div class="shield-watermark-row">
+                      <span class="shield-brand">ESPRESSIF</span>
+                      <span class="shield-ce">CE · RoHS · FCC</span>
+                    </div>
+                    <div class="shield-model">ESP32-WROOM-32</div>
+                    <div class="shield-spec">Wi-Fi &amp; Bluetooth Dual-Core MCU</div>
+                    <div class="shield-ic-visual">
+                      <div class="ic-die">
+                        <span class="ic-title">XTENSA LX6</span>
+                        <span class="ic-freq">240 MHz</span>
+                      </div>
                     </div>
                   </div>
+
+                  <!-- Right Castellated Pin Bank -->
+                  <div class="esp-pin-bank pins-right">
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">GND</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D23</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D22</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">TX</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">RX</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D21</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D19</span></div>
+                    <div class="pin-item"><span class="pin-pad"></span><span class="pin-name">D18</span></div>
+                  </div>
                 </div>
 
-                <!-- Hardware LEDs -->
+                <!-- Hardware SMD LEDs -->
                 <div class="esp-indicators-bar">
                   <div class="hw-led led-pwr"><span class="hw-dot red"></span><b>PWR</b></div>
                   <div class="hw-led led-run"><span class="hw-dot blue"></span><b>RUN</b></div>
                   <div class="hw-led led-wifi"><span class="hw-dot green"></span><b>WIFI</b></div>
                 </div>
+              </div>
+            </div>
 
-                <!-- Golden Edge Pins (Left & Right) -->
-                <div class="esp-gold-pins pins-left">
-                  <span>3V3</span><span>EN</span><span>VP</span><span>VN</span><span>D34</span><span>D35</span><span>D32</span>
-                </div>
-                <div class="esp-gold-pins pins-right">
-                  <span>GND</span><span>D23</span><span>D22</span><span>TX</span><span>RX</span><span>D21</span><span>D19</span>
-                </div>
+            <!-- Hardware Spec Architecture Ribbon -->
+            <div class="esp-bus-ribbon">
+              <div class="bus-chip">
+                <span class="bus-label">FLASH</span>
+                <span class="bus-value">4 MB SPI</span>
+              </div>
+              <div class="bus-chip">
+                <span class="bus-label">SRAM</span>
+                <span class="bus-value">520 KB</span>
+              </div>
+              <div class="bus-chip">
+                <span class="bus-label">ARCHITECTURE</span>
+                <span class="bus-value">32-BIT DUAL</span>
               </div>
             </div>
 
