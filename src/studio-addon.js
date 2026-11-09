@@ -1150,9 +1150,12 @@ class StudioAddon {
         <span style="font-size:12px; color:#ea580c; font-weight:600;">▼ ย่อ/ขยาย</span>
       </div>
       <div class="app-body" id="addon-installed-list">
-        <p style="text-align:center; color:#64748b; font-size:12.5px; margin:16px 0;">
-          ยังไม่มีอุปกรณ์ที่เพิ่มเข้ามา<br/>กดปุ่ม <b>"➕ เพิ่มอุปกรณ์"</b> เพื่อเริ่มเชื่อมต่อ
-        </p>
+        <div style="text-align:center; color:#64748b; font-size:12.5px; margin:16px 0;">
+          ยังไม่มีอุปกรณ์ที่เพิ่มเข้ามา<br/>
+          <button class="addon-btn primary" id="addon-drawer-quick-add" style="margin-top:10px; display:inline-flex; border-radius:10px; padding:6px 14px; font-size:12px;">
+            ➕ เพิ่มอุปกรณ์ตอนนี้
+          </button>
+        </div>
       </div>
       <div style="padding: 10px 12px; border-top: 1.5px solid #f1f5f9; display:flex; gap:8px;">
         <button class="addon-btn primary" style="flex:1; justify-content:center; border-radius:12px;" id="addon-copy-code">
@@ -1208,6 +1211,37 @@ class StudioAddon {
     });
 
     document.getElementById('addon-copy-code').addEventListener('click', () => this.copyGeneratedSketch());
+
+    document.getElementById('addon-drawer-quick-add')?.addEventListener('click', () => this.openAddComponentModal());
+
+    // Hook into flyout when opened for "parts" (Components) to inject Add Component action
+    const flyoutEl = document.getElementById('flyout');
+    if (flyoutEl) {
+      const injectPartsBar = () => {
+        if (flyoutEl.dataset.kind === 'parts' && !flyoutEl.querySelector('.fly-add-part-bar')) {
+          const addBar = document.createElement('div');
+          addBar.className = 'fly-add-part-bar';
+          addBar.innerHTML = `
+            <button class="fly-add-btn" id="fly-btn-add-comp">
+              <span class="fly-add-icon">➕</span>
+              <span>เพิ่มอุปกรณ์ใหม่ลงบนบอร์ด 3D</span>
+            </button>
+          `;
+          const header = flyoutEl.querySelector('header');
+          if (header) {
+            header.after(addBar);
+          } else {
+            flyoutEl.prepend(addBar);
+          }
+          addBar.querySelector('#fly-btn-add-comp').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.openAddComponentModal();
+          });
+        }
+      };
+      const observer = new MutationObserver(injectPartsBar);
+      observer.observe(flyoutEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-kind', 'class'] });
+    }
 
     // Auth modal controls
     document.getElementById('auth-modal-close')?.addEventListener('click', () => this.closeAuthModal());

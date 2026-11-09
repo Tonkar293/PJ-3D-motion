@@ -3769,3 +3769,47 @@ body.is-authenticated #app {
   border-color: #dc2626;
 }
 
+/* ============================================================
+   Components Flyout: Add Component Action Bar
+   ============================================================ */
+.fly-add-part-bar {
+  padding: 10px 14px;
+  background: rgba(249, 115, 22, 0.08);
+  border-bottom: 1.5px solid rgba(249, 115, 22, 0.2);
+  margin-bottom: 4px;
+}
+
+.fly-add-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.fly-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.5);
+  filter: brightness(1.08);
+}
+
+.fly-add-btn:active {
+  transform: translateY(0);
+}
+
+.fly-add-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
