@@ -70,66 +70,110 @@ const COMPONENT_CATALOG = [
   {
     id: 'led',
     name: 'LED (หลอดไฟเดี่ยว)',
-    desc: 'ไฟสว่าง ปรับสีได้ ต่อตรงเข้ากับ GPIO',
+    desc: 'ไฟสว่าง ปรับสีได้ ต่อตรงเข้ากับ GPIO4 ควบคุมกระพริบ',
     icon: '💡',
+    lessonId: 'blink',
     defaultPin: '4',
-    pins: ['2', '4', '12', '14', '18', '19', '21', '22', '23', '25', '26', '27', '32', '33']
-  },
-  {
-    id: 'rgb',
-    name: 'RGB LED (หลอด 3 สี)',
-    desc: 'ผสมสีแสง Red, Green, Blue ผ่าน PWM',
-    icon: '🌈',
-    defaultPin: '25',
-    pins: ['25', '26', '27']
+    pins: ['2', '4', '12', '14', '18', '19', '21', '22', '23', '25', '26', '27']
   },
   {
     id: 'button',
     name: 'Push Button (ปุ่มกด)',
-    desc: 'สวิตช์กดติดปล่อยดับ ต่อเข้ากับ GPIO อินพุต',
+    desc: 'สวิตช์กดติดปล่อยดับ ต่อเข้ากับ GPIO4 อินพุต พร้อมระบบแจ้งเตือน',
     icon: '🔘',
-    defaultPin: '18',
-    pins: ['4', '5', '18', '19', '21', '22', '23', '32', '33', '34', '35']
+    lessonId: 'button',
+    defaultPin: '4',
+    pins: ['4', '5', '18', '19', '21', '22', '23']
   },
   {
     id: 'buzzer',
     name: 'Buzzer (ลำโพงเตือน)',
-    desc: 'สร้างเสียงโน้ตดนตรีและสัญญาณเตือนภัย',
+    desc: 'สร้างเสียงโน้ตดนตรี ความถี่เสียง และสัญญาณเตือนภัยไซเรน',
     icon: '🔊',
-    defaultPin: '19',
-    pins: ['4', '18', '19', '21', '22', '23']
+    lessonId: 'sound',
+    defaultPin: '17',
+    pins: ['4', '17', '18', '19', '21', '22', '23']
+  },
+  {
+    id: 'rgb',
+    name: 'RGB LED (หลอด 3 สี)',
+    desc: 'ผสมสีแสง Red, Green, Blue ผ่านสัญญาณ PWM กำหนดเฉดสีได้อิสระ',
+    icon: '🌈',
+    lessonId: 'rgb',
+    defaultPin: '25',
+    pins: ['25', '26', '27']
   },
   {
     id: 'servo',
-    name: 'Servo SG90 (เซอร์โว)',
-    desc: 'มอเตอร์หมุนปรับมุมองศา 0–180 องศา',
+    name: 'Servo SG90 (เซอร์โวมอเตอร์)',
+    desc: 'มอเตอร์หมุนปรับมุมองศา 0–180° พร้อมไม้โปรแทรคเตอร์วัดมุม',
     icon: '⚙️',
+    lessonId: 'servo',
     defaultPin: '13',
     pins: ['13', '14', '15', '27', '32', '33']
   },
   {
     id: 'hcsr04',
-    name: 'HC-SR04 (วัดระยะ)',
-    desc: 'อัลตร้าโซนิกตรวจจับวัตถุและระยะสะท้อน',
+    name: 'HC-SR04 (เซนเซอร์วัดระยะ)',
+    desc: 'คลื่นอัลตร้าโซนิกตรวจจับวัตถุ พร้อมกราฟสะท้อนระยะทาง',
     icon: '🦇',
+    lessonId: 'sensor',
     defaultPin: '5',
     pins: ['5', '18', '19', '23']
   },
   {
     id: 'ldr',
-    name: 'LDR (เซนเซอร์แสง)',
-    desc: 'ตัวต้านทานแปรผันตามความเข้มแสง Lux',
+    name: 'LDR (เซนเซอร์ตรวจจับแสง)',
+    desc: 'ตัวต้านทานแปรผันตามความเข้มแสง Lux จำลองโคมไฟเปิด-ปิดอัตโนมัติ',
     icon: '☀️',
+    lessonId: 'light',
     defaultPin: '34',
     pins: ['32', '33', '34', '35', '36', '39']
   },
   {
+    id: 'potentiometer',
+    name: 'Potentiometer (ตัวต้านทานปรับค่าได้)',
+    desc: 'หมุนลูกบิดปรับแรงดันอะนาล็อก 0–3.3V (ADC 12-bit)',
+    icon: '🎛️',
+    lessonId: 'knob',
+    defaultPin: '34',
+    pins: ['32', '33', '34', '35']
+  },
+  {
     id: 'oled',
-    name: 'OLED 0.96" SSD1306',
-    desc: 'หน้าจอดิจิทัล I2C แสดงข้อความและกราฟิก',
-    icon: '📺',
+    name: 'OLED Display & Radar',
+    desc: 'หน้าจอดิจิทัล SSD1306 แสดงผลเรดาร์และข้อมูลกราฟิกแบบสด',
+    icon: '📟',
+    lessonId: 'radar',
     defaultPin: '21',
     pins: ['21', '22']
+  },
+  {
+    id: 'dcmotor',
+    name: 'DC Motor & Driver',
+    desc: 'มอเตอร์ไฟฟ้ากระแสตรง ควบคุมทิศทางเดินหน้า-ถอยหลัง และความเร็ว',
+    icon: '🚙',
+    lessonId: 'motor',
+    defaultPin: '18',
+    pins: ['18', '19', '23']
+  },
+  {
+    id: 'wifi',
+    name: 'Wi-Fi AP & Web Server',
+    desc: 'โมดูลสื่อสารไร้สาย สร้างเว็บเซิร์ฟเวอร์ควบคุมอุปกรณ์ผ่านสมาร์ทโฟน',
+    icon: '📡',
+    lessonId: 'wifi',
+    defaultPin: 'RADIO',
+    pins: ['WIFI']
+  },
+  {
+    id: 'bluetooth',
+    name: 'Bluetooth BLE Console',
+    desc: 'เชื่อมต่อไร้สายผ่าน Bluetooth Low Energy กับสมาร์ทโฟน',
+    icon: '📶',
+    lessonId: 'bluetooth',
+    defaultPin: 'BLE',
+    pins: ['BLE']
   }
 ];
 
@@ -141,6 +185,8 @@ class StudioAddon {
     this.wireGroup = null;
     this.audioCtx = null;
     this.floorMarkMesh = null;
+
+    window.addonStudio = this;
 
     // Initialize Auth & Session
     this.initAuth();
@@ -1214,28 +1260,67 @@ class StudioAddon {
 
     document.getElementById('addon-drawer-quick-add')?.addEventListener('click', () => this.openAddComponentModal());
 
-    // Hook into flyout when opened for "parts" (Components) to inject Add Component action
+    // Hook into flyout when opened for "parts" (Components) to inject full catalog & Add Component action
     const flyoutEl = document.getElementById('flyout');
     if (flyoutEl) {
       const injectPartsBar = () => {
-        if (flyoutEl.dataset.kind === 'parts' && !flyoutEl.querySelector('.fly-add-part-bar')) {
-          const addBar = document.createElement('div');
-          addBar.className = 'fly-add-part-bar';
-          addBar.innerHTML = `
-            <button class="fly-add-btn" id="fly-btn-add-comp">
-              <span class="fly-add-icon">➕</span>
-              <span>เพิ่มอุปกรณ์ใหม่ลงบนบอร์ด 3D</span>
-            </button>
-          `;
+        if (flyoutEl.dataset.kind === 'parts') {
+          if (flyoutEl.querySelector('.fly-components-catalog')) return;
+
+          const currentLessonParts = flyoutEl.querySelector('.fly-list');
           const header = flyoutEl.querySelector('header');
           if (header) {
-            header.after(addBar);
-          } else {
-            flyoutEl.prepend(addBar);
+            header.innerHTML = `<h2>อุปกรณ์ทั้งหมด (Components)</h2><span>${COMPONENT_CATALOG.length} รายการ</span>`;
           }
-          addBar.querySelector('#fly-btn-add-comp').addEventListener('click', (e) => {
+
+          const catalogEl = document.createElement('div');
+          catalogEl.className = 'fly-components-catalog';
+          catalogEl.innerHTML = `
+            <div class="fly-add-part-bar">
+              <button class="fly-add-btn" id="fly-btn-add-comp">
+                <span class="fly-add-icon">➕</span>
+                <span>เปิดหน้าต่างเลือกอุปกรณ์</span>
+              </button>
+            </div>
+            <div class="fly-cat-subtitle">คลิกอุปกรณ์เพื่อเปิดวงจร 3D และโค้ดทันที:</div>
+            <ul class="fly-list fly-comp-list">
+              ${COMPONENT_CATALOG.map(c => `
+                <li>
+                  <button class="fly-comp-btn" data-comp-id="${c.id}" data-lesson-id="${c.lessonId || ''}">
+                    <span class="fly-comp-icon">${c.icon}</span>
+                    <span class="fly-text">
+                      <b>${c.name}</b>
+                      <small>${c.desc}</small>
+                    </span>
+                    <span class="fly-badge-action">เลือก</span>
+                  </button>
+                </li>
+              `).join('')}
+            </ul>
+          `;
+
+          if (currentLessonParts) {
+            currentLessonParts.replaceWith(catalogEl);
+          } else {
+            flyoutEl.appendChild(catalogEl);
+          }
+
+          catalogEl.querySelector('#fly-btn-add-comp')?.addEventListener('click', (e) => {
             e.stopPropagation();
             this.openAddComponentModal();
+          });
+
+          catalogEl.querySelectorAll('.fly-comp-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const compId = btn.dataset.compId;
+              const lessonId = btn.dataset.lessonId;
+              const comp = COMPONENT_CATALOG.find(c => c.id === compId);
+              if (lessonId && window.__app?.selectLesson) {
+                window.__app.selectLesson(lessonId);
+                this.toast(`กำลังโหลดวงจร 3D: ${comp ? comp.name : compId} พร้อมสายไฟและโค้ดตัวอย่าง! 🚀`);
+              }
+            });
           });
         }
       };
@@ -1679,16 +1764,17 @@ class StudioAddon {
 
     body.innerHTML = `
       <div style="margin-bottom: 14px; font-size: 13.5px; color: #475569;">
-        คลิกเลือกอุปกรณ์อิเล็กทรอนิกส์ด้านล่างเพื่อเชื่อมต่อเข้ากับ ESP32 บนบอร์ด 3D:
+        คลิกเลือกอุปกรณ์อิเล็กทรอนิกส์ด้านล่างเพื่อเชื่อมต่อเข้ากับ ESP32 บนบอร์ด 3D ทันที:
       </div>
       <div class="parts-grid">
         ${COMPONENT_CATALOG.map(c => `
-          <div class="part-item-card" data-comp-id="${c.id}">
+          <div class="part-item-card" data-comp-id="${c.id}" data-lesson-id="${c.lessonId || ''}">
             <div class="part-item-icon">${c.icon}</div>
             <b>${c.name}</b>
             <span>${c.desc}</span>
-            <div style="margin-top:8px; font-size:11.5px; font-weight:700; color:#ea580c;">
-              ต่อที่: <b>GPIO ${c.defaultPin}</b>
+            <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-size:11.5px; font-weight:700; color:#ea580c;">GPIO ${c.defaultPin}</span>
+              <span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; background:#ffedd5; color:#ea580c;">เปิดใช้งาน</span>
             </div>
           </div>
         `).join('')}
@@ -1699,9 +1785,14 @@ class StudioAddon {
       card.addEventListener('click', () => {
         const comp = COMPONENT_CATALOG.find(c => c.id === card.dataset.compId);
         if (comp) {
-          this.addComponentToScene(comp);
           this.closeModal();
-          document.getElementById('addon-drawer').classList.remove('is-collapsed');
+          if (comp.lessonId && window.__app?.selectLesson) {
+            window.__app.selectLesson(comp.lessonId);
+            this.toast(`กำลังโหลดวงจร 3D: ${comp.name} พร้อมสายไฟ Breadboard และโค้ดตัวอย่าง! 🚀`);
+          } else {
+            this.addComponentToScene(comp);
+            document.getElementById('addon-drawer').classList.remove('is-collapsed');
+          }
         }
       });
     });
@@ -1724,9 +1815,10 @@ class StudioAddon {
 
     const id = `${comp.id}_${Date.now()}`;
     const offsetIndex = this.installed.length;
-    // Calculate 3D placement next to breadboard
-    const posX = -32 + (offsetIndex % 4) * 22;
-    const posZ = 34 + Math.floor(offsetIndex / 4) * 20;
+    // Calculate 3D placement next to ESP32 board on visible table surface
+    const posX = 16 + (offsetIndex % 3) * 12;
+    const posY = -3.8;
+    const posZ = 2 + Math.floor(offsetIndex / 3) * 10;
 
     let meshObj = null;
     let state = { isOn: false, val: 0 };
@@ -1736,23 +1828,23 @@ class StudioAddon {
         const colors = [0xff2d4a, 0x2dff7a, 0x2d8cff, 0xffc21a, 0xffffff];
         const col = colors[offsetIndex % colors.length];
         meshObj = parts.led(col);
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         break;
       }
       case 'rgb': {
         meshObj = parts.rgbLamp();
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         meshObj.scale.set(0.7, 0.7, 0.7);
         break;
       }
       case 'button': {
         meshObj = parts.button();
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         break;
       }
       case 'servo': {
         meshObj = parts.servo();
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         meshObj.scale.set(0.85, 0.85, 0.85);
         state.val = 90;
         meshObj.set(90);
@@ -1760,18 +1852,18 @@ class StudioAddon {
       }
       case 'hcsr04': {
         meshObj = parts.hcsr04();
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         state.val = 30;
         break;
       }
       case 'ldr': {
         meshObj = parts.ldr();
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         break;
       }
       case 'oled': {
         meshObj = parts.display();
-        meshObj.position.set(posX, 6, posZ);
+        meshObj.position.set(posX, posY + 6, posZ);
         meshObj.set('ESP32', 'READY');
         break;
       }
@@ -1782,19 +1874,19 @@ class StudioAddon {
         const bzTop = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.4, 16), new THREE.MeshStandardMaterial({ color: 0x333333 }));
         bzTop.position.y = 5.2;
         meshObj.add(bz, bzTop);
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
         break;
       }
       default: {
         meshObj = parts.led();
-        meshObj.position.set(posX, 0, posZ);
+        meshObj.position.set(posX, posY, posZ);
       }
     }
 
     this.wireGroup.add(meshObj);
 
     // Create 3D jumper wire to ESP32 board
-    const wire = this.createJumperWire(meshObj.position, new THREE.Vector3(0, 4, 10));
+    const wire = this.createJumperWire(meshObj.position, new THREE.Vector3(0, 0, 8));
     this.wireGroup.add(wire);
 
     const instance = {
@@ -1808,6 +1900,9 @@ class StudioAddon {
 
     this.installed.push(instance);
     stage.dirty = true;
+    if (stage.controls && stage.controls.focusPoint) {
+      stage.controls.focusPoint(new THREE.Vector3(posX, posY, posZ));
+    }
     this.updateInstalledListUI();
     this.toast(`เพิ่ม ${comp.name} สำเร็จ! ✨`);
   }

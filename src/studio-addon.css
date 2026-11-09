@@ -3813,3 +3813,79 @@ body.is-authenticated #app {
   line-height: 1;
 }
 
+.fly-cat-subtitle {
+  padding: 6px 14px 4px;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.fly-comp-list {
+  max-height: 440px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.fly-comp-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  text-align: left !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  margin-bottom: 4px !important;
+}
+
+.fly-comp-btn:hover {
+  background: #fffaf5 !important;
+  border-color: #f97316 !important;
+  transform: translateX(3px) !important;
+}
+
+.fly-comp-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.fly-comp-btn .fly-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.fly-comp-btn .fly-text b {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fly-comp-btn .fly-text small {
+  font-size: 10.5px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.fly-badge-action {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ea580c;
+  background: #ffedd5;
+  padding: 3px 8px;
+  border-radius: 99px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
