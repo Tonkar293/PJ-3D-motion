@@ -3123,18 +3123,223 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   }
 }
 
-/* Dissolve Out Animation for Auth Modal */
-.auth-modal-card.is-dissolving {
+/* Dissolve Out Animation for Auth Modal & Profile Modal */
+.auth-modal-card.is-dissolving,
+.profile-modal-card.is-dissolving {
   transform: scale(1.05) translateY(-8px) !important;
   opacity: 0 !important;
   filter: blur(12px) !important;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.auth-modal-bg.is-dissolving {
+.auth-modal-bg.is-dissolving,
+.profile-modal-bg.is-dissolving {
   opacity: 0 !important;
   filter: blur(16px) !important;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ============================================================
+   Cinematic Logout Animation Overlay
+   ============================================================ */
+.auth-logout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+}
+
+.auth-logout-overlay.is-fading-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.logout-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.88) 0%, rgba(3, 7, 18, 0.96) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  animation: logoutBackdropFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes logoutBackdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.logout-box {
+  position: relative;
+  z-index: 2;
+  width: min(420px, 92vw);
+  background: rgba(30, 41, 59, 0.88);
+  border: 1.5px solid rgba(249, 115, 22, 0.38);
+  border-radius: 26px;
+  padding: 34px 28px 30px;
+  box-shadow: 
+    0 25px 70px -15px rgba(0, 0, 0, 0.85),
+    0 0 40px rgba(249, 115, 22, 0.16),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: logoutBoxPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes logoutBoxPop {
+  0% {
+    transform: scale(0.85) translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.logout-ring-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.logout-pulse-ring {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.35) 0%, rgba(249, 115, 22, 0) 70%);
+  animation: logoutPulseExpand 1.2s infinite ease-out;
+}
+
+@keyframes logoutPulseExpand {
+  0% {
+    transform: scale(0.85);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.logout-icon-badge {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  box-shadow: 
+    0 12px 28px -4px rgba(239, 68, 68, 0.45),
+    0 0 24px rgba(249, 115, 22, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  animation: logoutBadgePop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes logoutBadgePop {
+  0% {
+    transform: scale(0.35) rotate(20deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.logout-door {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: logoutDoorDraw 0.4s ease 0.1s forwards;
+}
+
+@keyframes logoutDoorDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+.logout-arrow-line,
+.logout-arrow-head {
+  animation: logoutArrowSlide 0.8s infinite ease-in-out;
+}
+
+@keyframes logoutArrowSlide {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+.logout-headline {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.4px;
+  animation: logoutTextSlide 0.4s ease 0.1s both;
+}
+
+.logout-subtext {
+  margin: 0 0 20px;
+  font-size: 13.5px;
+  color: #94a3b8;
+  font-weight: 500;
+  animation: logoutTextSlide 0.4s ease 0.15s both;
+}
+
+@keyframes logoutTextSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logout-progress-track {
+  width: 150px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  position: relative;
+}
+
+.logout-progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #f97316 0%, #ef4444 100%);
+  animation: logoutProgressFill 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards;
+}
+
+@keyframes logoutProgressFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* Stage Blur when Logging Out */
+body.is-logging-out #app {
+  filter: blur(10px) brightness(0.65);
+  transition: filter 0.5s ease-out;
+  pointer-events: none;
 }
 
 /* Cinematic Entrance for 3D Studio Stage - ONLY Opacity and Blur, preserving artboard scale transform */

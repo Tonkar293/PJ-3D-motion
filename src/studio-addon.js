@@ -318,6 +318,38 @@ class StudioAddon {
     } catch (e) {}
   }
 
+  playLogoutChime() {
+    try {
+      if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+      const now = this.audioCtx.currentTime;
+      // High-tech warm descending harmonic chord: E5 (659Hz) -> A4 (440Hz) -> D4 (293Hz)
+      const osc1 = this.audioCtx.createOscillator();
+      const gain1 = this.audioCtx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(659.25, now);
+      osc1.frequency.exponentialRampToValueAtTime(440, now + 0.35);
+      gain1.gain.setValueAtTime(0.08, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc1.connect(gain1);
+      gain1.connect(this.audioCtx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.35);
+
+      const osc2 = this.audioCtx.createOscillator();
+      const gain2 = this.audioCtx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(523.25, now + 0.08);
+      osc2.frequency.exponentialRampToValueAtTime(293.66, now + 0.5);
+      gain2.gain.setValueAtTime(0.07, now + 0.08);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+      osc2.connect(gain2);
+      gain2.connect(this.audioCtx.destination);
+      osc2.start(now + 0.08);
+      osc2.stop(now + 0.55);
+    } catch (e) {}
+  }
+
   triggerLoginSuccess(account, remember = true, title = 'เข้าสู่ระบบสำเร็จ') {
     this.playLoginChime();
 
@@ -425,11 +457,65 @@ class StudioAddon {
 
   logout() {
     const prev = this.currentUser ? this.currentUser.name : '';
-    this.saveCurrentUser(null, false);
-    this.updateAuthUI();
-    this.closeProfileModal();
-    this.openAuthModal('login');
-    this.toast(`ออกจากระบบแล้ว ${prev ? `(ลาก่อนคุณ ${prev})` : ''}`);
+    this.playLogoutChime();
+
+    let overlay = document.getElementById('addon-logout-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'addon-logout-overlay';
+      overlay.className = 'auth-logout-overlay';
+      overlay.innerHTML = `
+        <div class="logout-backdrop"></div>
+        <div class="logout-box">
+          <div class="logout-ring-wrap">
+            <div class="logout-pulse-ring"></div>
+            <div class="logout-icon-badge">
+              <svg class="logout-icon-svg" viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path class="logout-door" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline class="logout-arrow-head" points="16 17 21 12 16 7"></polyline>
+                <line class="logout-arrow-line" x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </div>
+          </div>
+          <h3 class="logout-headline" id="logout-headline">กำลังออกจากระบบ</h3>
+          <p class="logout-subtext" id="logout-subtext">บันทึกข้อมูลและออกจากระบบอย่างปลอดภัย</p>
+          <div class="logout-progress-track">
+            <div class="logout-progress-bar"></div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    const subtext = overlay.querySelector('#logout-subtext');
+    if (subtext) {
+      subtext.innerHTML = prev ? `ขอบคุณที่ใช้งานสตูดิโอ 3D · ลาก่อนคุณ <b style="color:#f97316;">${prev}</b>` : 'บันทึกข้อมูลและออกจากระบบอย่างปลอดภัย';
+    }
+
+    overlay.classList.remove('is-fading-out');
+    overlay.style.display = 'flex';
+    document.body.classList.add('is-logging-out');
+
+    // Close open profile card smoothly
+    const profCard = document.querySelector('.profile-modal-card');
+    if (profCard) profCard.classList.add('is-dissolving');
+
+    setTimeout(() => {
+      this.closeProfileModal();
+      this.saveCurrentUser(null, false);
+      this.updateAuthUI();
+      this.openAuthModal('login');
+
+      overlay.classList.add('is-fading-out');
+      document.body.classList.remove('is-logging-out');
+      if (profCard) profCard.classList.remove('is-dissolving');
+
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('is-fading-out');
+        this.toast(`ออกจากระบบเรียบร้อยแล้ว ${prev ? `(ลาก่อนคุณ ${prev} 👋)` : ''}`);
+      }, 400);
+    }, 800);
   }
 
   openAuthModal(defaultTab = 'login') {
