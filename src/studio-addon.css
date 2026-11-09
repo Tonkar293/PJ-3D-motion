@@ -1729,13 +1729,17 @@ body.not-authenticated .scenery {
   100% { transform: translate(-20px, 20px) scale(0.96); }
 }
 
+/* ============================================================
+   Dual-Chamber Hardware Studio Cockpit Login Portal
+   ============================================================ */
+
 /* Full-Screen Dedicated Opaque Login Portal */
 html.not-authenticated .auth-modal-bg,
 body.not-authenticated .auth-modal-bg {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  background: radial-gradient(circle at 50% 30%, #ffffff 0%, #fffdfa 35%, #fff4e5 70%, #fde4c3 100%) !important;
+  background: radial-gradient(ellipse at 50% 25%, #0f172a 0%, #090d16 55%, #04060c 100%) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   z-index: 9999999 !important;
@@ -1748,10 +1752,10 @@ body.not-authenticated .auth-modal-bg::before {
   position: absolute !important;
   inset: 0 !important;
   background-image: 
-    radial-gradient(rgba(234, 88, 12, 0.14) 1.5px, transparent 1.5px),
-    linear-gradient(to right, rgba(234, 88, 12, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(234, 88, 12, 0.035) 1px, transparent 1px) !important;
-  background-size: 26px 26px, 78px 78px, 78px 78px !important;
+    radial-gradient(rgba(249, 115, 22, 0.22) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px) !important;
+  background-size: 28px 28px, 84px 84px, 84px 84px !important;
   pointer-events: none !important;
   z-index: 1 !important;
 }
@@ -1759,10 +1763,9 @@ body.not-authenticated .auth-modal-bg::before {
 html.not-authenticated .auth-modal-card,
 body.not-authenticated .auth-modal-card {
   box-shadow: 
-    0 25px 70px -12px rgba(234, 88, 12, 0.22),
-    0 0 0 1px rgba(255, 107, 74, 0.18),
-    0 0 60px rgba(255, 159, 28, 0.12),
-    inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
+    0 30px 100px -15px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(249, 115, 22, 0.28),
+    0 0 60px rgba(249, 115, 22, 0.16) !important;
   transform: translateY(0) scale(1) !important;
 }
 
@@ -1777,9 +1780,9 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .profile-modal-bg {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(8, 12, 22, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -1799,25 +1802,24 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   pointer-events: auto;
 }
 
-/* Auth Modal Card (High-End Glassmorphism Card) */
+/* Cockpit Card Container */
 .auth-modal-card {
-  width: min(480px, 94vw);
-  max-height: 92vh;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.95);
+  width: min(1040px, 95vw);
+  max-height: 94vh;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 28px;
   box-shadow: 
-    0 20px 60px -15px rgba(234, 88, 12, 0.2),
-    0 0 0 1px rgba(255, 107, 74, 0.15),
-    inset 0 1px 3px rgba(255, 255, 255, 0.95);
+    0 25px 80px -15px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(249, 115, 22, 0.25),
+    0 0 50px rgba(249, 115, 22, 0.12);
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
-  padding: 34px 28px 26px;
+  padding: 0;
   box-sizing: border-box;
   position: relative;
   z-index: 2;
-  overflow-y: auto;
-  scrollbar-width: thin;
+  overflow: hidden;
   transform: translateY(20px) scale(0.96);
   transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
@@ -1827,12 +1829,12 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   content: "";
   position: absolute;
   top: 0;
-  left: 28px;
-  right: 28px;
+  left: 0;
+  right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ff5722 0%, #ff8a00 50%, #ffa000 100%);
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 1px 8px rgba(255, 87, 34, 0.4);
+  background: linear-gradient(90deg, #ff5722 0%, #ff8a00 35%, #f59e0b 70%, #10b981 100%);
+  z-index: 10;
+  box-shadow: 0 1px 10px rgba(255, 87, 34, 0.5);
 }
 
 .auth-modal-bg.is-open .auth-modal-card,
@@ -1847,9 +1849,9 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: #64748b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -1857,6 +1859,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   cursor: pointer;
   transition: all 0.2s ease;
   line-height: 1;
+  z-index: 15;
 }
 
 .auth-close-btn:hover {
@@ -1866,17 +1869,350 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   transform: rotate(90deg);
 }
 
-/* Auth Header */
+/* Cockpit Layout Structure */
+.auth-cockpit-layout {
+  display: flex;
+  width: 100%;
+  min-height: 620px;
+  max-height: 92vh;
+}
+
+/* ============================================================
+   LEFT CHAMBER: Interactive Hardware Showcase Deck
+   ============================================================ */
+.auth-showcase-chamber {
+  width: 44%;
+  min-width: 370px;
+  background: linear-gradient(155deg, #090e1a 0%, #0d1527 50%, #131c33 100%);
+  padding: 34px 30px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.showcase-glow-radial {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.16) 0%, rgba(249, 115, 22, 0) 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.showcase-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.showcase-chip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 13px;
+  border-radius: 99px;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  color: #fb923c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.pulse-emerald-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: dotPulse 2s infinite ease-in-out;
+}
+
+.showcase-fps-badge {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+/* ESP32 Module Visual Deck */
+.esp-visual-deck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+  z-index: 2;
+}
+
+.esp-module-frame {
+  position: relative;
+  width: 250px;
+  background: #090c14;
+  border: 2px solid #1e293b;
+  border-radius: 16px;
+  padding: 16px 18px 14px;
+  box-shadow: 
+    0 18px 40px -10px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(249, 115, 22, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+.esp-antenna-block {
+  position: relative;
+  width: 100%;
+  height: 38px;
+  background: #0d121e;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  overflow: hidden;
+}
+
+.esp-antenna-svg {
+  width: 90%;
+  height: auto;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5));
+}
+
+.antenna-rf-pulse {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 12px #38bdf8;
+  animation: rfBeacon 1.8s infinite ease-out;
+}
+
+@keyframes rfBeacon {
+  0% { transform: translateY(-50%) scale(0.8); opacity: 1; }
+  100% { transform: translateY(-50%) scale(2.8); opacity: 0; }
+}
+
+.esp-metal-shield {
+  background: linear-gradient(145deg, #1e283b 0%, #131a29 55%, #25334c 100%);
+  border: 1.5px solid #334155;
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #e2e8f0;
+  text-align: center;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.shield-watermark-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8.5px;
+  color: #94a3b8;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.shield-model {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.shield-spec {
+  font-size: 9.5px;
+  color: #94a3b8;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.shield-ic-visual {
+  margin-top: 10px;
+  background: #090c14;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ic-die {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ic-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #f97316;
+  letter-spacing: 0.5px;
+}
+
+.ic-freq {
+  font-size: 9.5px;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.esp-indicators-bar {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 12px;
+  padding: 6px 4px;
+  background: #0d121e;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hw-led {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
+.hw-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.hw-dot.red {
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+}
+
+.hw-dot.blue {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: runBlink 1.4s infinite ease-in-out;
+}
+
+.hw-dot.green {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: runBlink 2.2s infinite ease-in-out;
+}
+
+@keyframes runBlink {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); }
+}
+
+.esp-gold-pins {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  font-size: 7.5px;
+  font-weight: 800;
+  color: #d97706;
+}
+
+.esp-gold-pins.pins-left {
+  left: 3px;
+}
+
+.esp-gold-pins.pins-right {
+  right: 3px;
+}
+
+/* Showcase Telemetry */
+.showcase-telemetry {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  z-index: 2;
+  margin-top: 14px;
+}
+
+.telemetry-item {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.tele-val {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fb923c;
+  letter-spacing: 0.4px;
+}
+
+.tele-lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.showcase-creator-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #cbd5e1;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 2;
+}
+
+.showcase-creator-tag b {
+  color: #f97316;
+}
+
+/* ============================================================
+   RIGHT CHAMBER: Sleek Terminal Access Console
+   ============================================================ */
+.auth-console-chamber {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  padding: 34px 38px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
 .auth-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .auth-brand-badge {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .auth-pill-tag {
@@ -1904,32 +2240,6 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   animation: dotPulse 2s infinite ease-in-out;
 }
 
-@keyframes dotPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.85); }
-}
-
-.auth-logo-badge {
-  position: relative;
-  width: 62px;
-  height: 62px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #ff5722 0%, #ff8a00 50%, #ffa000 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 
-    0 12px 28px -4px rgba(255, 87, 34, 0.42),
-    0 0 24px rgba(255, 138, 0, 0.28),
-    inset 0 2px 4px rgba(255, 255, 255, 0.6);
-  margin-bottom: 14px;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.auth-logo-badge:hover {
-  transform: scale(1.08) rotate(3deg);
-}
-
 .auth-title {
   margin: 0;
   font-size: 24px;
@@ -1945,7 +2255,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 }
 
 .auth-subtitle {
-  margin: 6px 0 0;
+  margin: 5px 0 0;
   font-size: 13px;
   color: #64748b;
   font-weight: 500;
@@ -1958,7 +2268,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   padding: 4px;
   border-radius: 99px;
   gap: 4px;
-  margin: 18px 0 16px;
+  margin: 16px 0 14px;
   border: 1px solid #e2e8f0;
 }
 
@@ -1968,7 +2278,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 99px;
   border: none;
   background: transparent;
@@ -1998,14 +2308,14 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 
 /* Error/Alert */
 .auth-alert {
-  padding: 11px 16px;
-  border-radius: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #b91c1c;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2015,13 +2325,13 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .auth-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   text-align: left;
 }
 
@@ -2036,9 +2346,9 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   position: relative;
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: #fbfcfe;
   border: 1.5px solid #e2e8f0;
-  border-radius: 16px;
+  border-radius: 14px;
   transition: all 0.22s ease;
   padding: 0 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -2051,7 +2361,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .auth-input-wrap:focus-within {
   background: #ffffff;
   border-color: #ff6b4a;
-  box-shadow: 0 0 0 4px rgba(255, 107, 74, 0.15), 0 4px 12px rgba(255, 107, 74, 0.06);
+  box-shadow: 0 0 0 4px rgba(255, 107, 74, 0.14), 0 2px 8px rgba(255, 107, 74, 0.06);
 }
 
 .auth-input-icon {
@@ -2068,8 +2378,8 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 12px 0;
-  font-size: 14px;
+  padding: 11px 0;
+  font-size: 13.5px;
   font-family: inherit;
   color: #0f172a;
   outline: none;
@@ -2106,7 +2416,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12.5px;
+  font-size: 12px;
   margin-top: -2px;
 }
 
@@ -2122,8 +2432,8 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 
 .auth-checkbox-label input[type="checkbox"] {
   accent-color: #ea580c;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -2143,10 +2453,10 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 /* Submit Buttons */
 .auth-submit-btn {
   width: 100%;
-  padding: 13px 20px;
-  border-radius: 16px;
+  padding: 12px 20px;
+  border-radius: 14px;
   border: none;
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 800;
   font-family: inherit;
   cursor: pointer;
@@ -2157,18 +2467,18 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   gap: 9px;
   position: relative;
   overflow: hidden;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .auth-submit-btn.primary {
   background: linear-gradient(135deg, #ff5722 0%, #ff8a00 50%, #ffa000 100%);
   color: #ffffff;
-  box-shadow: 0 10px 24px -4px rgba(255, 87, 34, 0.45), 0 4px 10px rgba(255, 138, 0, 0.25);
+  box-shadow: 0 10px 24px -4px rgba(255, 87, 34, 0.42), 0 4px 10px rgba(255, 138, 0, 0.22);
 }
 
 .auth-submit-btn.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px -4px rgba(255, 87, 34, 0.55), 0 6px 14px rgba(255, 138, 0, 0.35);
+  box-shadow: 0 14px 30px -4px rgba(255, 87, 34, 0.52), 0 6px 14px rgba(255, 138, 0, 0.32);
 }
 
 .auth-submit-btn.secondary {
@@ -2201,7 +2511,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   text-align: center;
   margin: 10px 0 8px;
   color: #94a3b8;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.3px;
   text-transform: uppercase;
@@ -2222,15 +2532,15 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .auth-quick-logins {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .auth-quick-btn {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 10px 14px;
-  border-radius: 16px;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 14px;
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
   cursor: pointer;
@@ -2249,8 +2559,8 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .auth-quick-btn.dev:hover {
   background: #ffffff;
   border-color: #ff6b4a;
-  transform: translateY(-2.5px);
-  box-shadow: 0 10px 22px -4px rgba(255, 107, 74, 0.24);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -4px rgba(255, 107, 74, 0.22);
 }
 
 .auth-quick-btn.student {
@@ -2261,18 +2571,18 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 .auth-quick-btn.student:hover {
   background: #ffffff;
   border-color: #3b82f6;
-  transform: translateY(-2.5px);
-  box-shadow: 0 10px 22px -4px rgba(59, 130, 246, 0.24);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -4px rgba(59, 130, 246, 0.22);
 }
 
 .quick-avatar-pill {
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.5px;
   flex-shrink: 0;
@@ -2298,7 +2608,7 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 }
 
 .quick-info b {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 800;
   color: #0f172a;
   white-space: nowrap;
@@ -2307,17 +2617,17 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 }
 
 .quick-info small {
-  font-size: 10.5px;
+  font-size: 10px;
   color: #64748b;
   white-space: nowrap;
   font-weight: 600;
 }
 
 .quick-badge {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 800;
   padding: 3px 6px;
-  border-radius: 6px;
+  border-radius: 5px;
   letter-spacing: 0.5px;
 }
 
@@ -2333,11 +2643,11 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
 
 /* Guest Skip Link */
 .auth-guest-row {
-  margin-top: 8px;
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .auth-guest-btn {
@@ -2345,12 +2655,12 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   border: 1.5px solid #e2e8f0;
   border-radius: 99px;
   color: #475569;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.22s ease;
   font-family: inherit;
-  padding: 8px 18px;
+  padding: 7px 16px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -2370,9 +2680,45 @@ body.not-authenticated .auth-modal-card .auth-close-btn {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 10.5px;
   color: #94a3b8;
   font-weight: 500;
+}
+
+/* Responsive Breakpoint for Mobile & Tablets */
+@media (max-width: 920px) {
+  .auth-modal-card {
+    width: min(500px, 94vw);
+    max-height: 94vh;
+  }
+  .auth-cockpit-layout {
+    flex-direction: column;
+    max-height: 94vh;
+  }
+  .auth-showcase-chamber {
+    width: 100%;
+    min-width: 0;
+    padding: 22px 20px 18px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .esp-visual-deck {
+    padding: 10px 0;
+  }
+  .esp-module-frame {
+    width: 220px;
+    padding: 12px 14px 10px;
+  }
+  .esp-antenna-block {
+    height: 30px;
+    margin-bottom: 8px;
+  }
+  .showcase-telemetry {
+    display: none;
+  }
+  .auth-console-chamber {
+    padding: 24px 22px 22px;
+  }
 }
 
 /* ============================================================

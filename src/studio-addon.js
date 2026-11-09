@@ -665,177 +665,245 @@ class StudioAddon {
           </div>
         </div>
 
-        <div class="auth-header">
-          <div class="auth-brand-badge">
-            <span class="auth-pill-tag">
-              <span class="auth-pill-dot"></span> STUDIO v2.0 • 3D HARDWARE LAB
-            </span>
-          </div>
-
-          <div class="auth-logo-badge">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="4" width="16" height="16" rx="3"/>
-              <rect x="9" y="9" width="6" height="6" fill="#ffffff" fill-opacity="0.35"/>
-              <line x1="9" y1="1" x2="9" y2="4"/>
-              <line x1="15" y1="1" x2="15" y2="4"/>
-              <line x1="9" y1="20" x2="9" y2="23"/>
-              <line x1="15" y1="20" x2="15" y2="23"/>
-              <line x1="20" y1="9" x2="23" y2="9"/>
-              <line x1="20" y1="15" x2="23" y2="15"/>
-              <line x1="1" y1="9" x2="4" y2="9"/>
-              <line x1="1" y1="15" x2="4" y2="15"/>
-            </svg>
-          </div>
-          <h2 class="auth-title">MotionLab <span class="gradient-text">ESP32 Studio</span></h2>
-          <p class="auth-subtitle">ระบบสมาชิกและบันทึกโปรเจกต์ 3D Studio</p>
-        </div>
-
-        <div class="auth-tabs">
-          <button type="button" class="auth-tab is-active" id="auth-tab-login">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-            <span>เข้าสู่ระบบ (Sign In)</span>
-          </button>
-          <button type="button" class="auth-tab" id="auth-tab-register">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-            <span>สมัครสมาชิก (Sign Up)</span>
-          </button>
-        </div>
-
-        <!-- Form Error Alert -->
-        <div class="auth-alert" id="auth-alert" style="display:none;"></div>
-
-        <!-- TAB 1: LOGIN -->
-        <form class="auth-form" id="auth-form-login">
-          <div class="auth-field">
-            <label for="auth-login-user">ชื่อผู้ใช้หรืออีเมล (Username / Email)</label>
-            <div class="auth-input-wrap">
-              <span class="auth-input-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="auth-cockpit-layout">
+          <!-- LEFT CHAMBER: Interactive Hardware Showcase Deck -->
+          <div class="auth-showcase-chamber">
+            <div class="showcase-glow-radial"></div>
+            
+            <div class="showcase-top-meta">
+              <span class="showcase-chip-badge">
+                <span class="pulse-emerald-dot"></span> HARDWARE LAB v2.5
               </span>
-              <input type="text" id="auth-login-user" placeholder="เช่น panuwich หรือ student" autocomplete="username" required />
+              <span class="showcase-fps-badge">60 FPS 3D ENGINE</span>
+            </div>
+
+            <!-- ESP32 Interactive Module Visualizer -->
+            <div class="esp-visual-deck">
+              <div class="esp-module-frame">
+                <!-- Golden Copper Antenna with RF Waves -->
+                <div class="esp-antenna-block">
+                  <svg class="esp-antenna-svg" viewBox="0 0 140 34" fill="none">
+                    <path d="M 10 30 L 10 8 L 28 8 L 28 26 L 46 26 L 46 8 L 64 8 L 64 26 L 82 26 L 82 8 L 100 8 L 100 26 L 118 26 L 118 8 L 132 8" stroke="#f59e0b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <div class="antenna-rf-pulse"></div>
+                </div>
+
+                <!-- Brushed Metal RF Shield -->
+                <div class="esp-metal-shield">
+                  <div class="shield-watermark-row">
+                    <span class="shield-brand">ESPRESSIF</span>
+                    <span class="shield-ce">CE · RoHS · FCC</span>
+                  </div>
+                  <div class="shield-model">ESP32-WROOM-32</div>
+                  <div class="shield-spec">Wi-Fi &amp; Bluetooth Dual-Core MCU</div>
+                  <div class="shield-ic-visual">
+                    <div class="ic-die">
+                      <span class="ic-title">XTENSA LX6</span>
+                      <span class="ic-freq">240 MHz</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Hardware LEDs -->
+                <div class="esp-indicators-bar">
+                  <div class="hw-led led-pwr"><span class="hw-dot red"></span><b>PWR</b></div>
+                  <div class="hw-led led-run"><span class="hw-dot blue"></span><b>RUN</b></div>
+                  <div class="hw-led led-wifi"><span class="hw-dot green"></span><b>WIFI</b></div>
+                </div>
+
+                <!-- Golden Edge Pins (Left & Right) -->
+                <div class="esp-gold-pins pins-left">
+                  <span>3V3</span><span>EN</span><span>VP</span><span>VN</span><span>D34</span><span>D35</span><span>D32</span>
+                </div>
+                <div class="esp-gold-pins pins-right">
+                  <span>GND</span><span>D23</span><span>D22</span><span>TX</span><span>RX</span><span>D21</span><span>D19</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Telemetry & Studio Specs -->
+            <div class="showcase-telemetry">
+              <div class="telemetry-item">
+                <span class="tele-val">20 LESSONS</span>
+                <span class="tele-lbl">บทเรียนจำลองฟรี</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="tele-val">REAL-TIME</span>
+                <span class="tele-lbl">ระบบสายไฟ 3 มิติ</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="tele-val">C++ ARDUINO</span>
+                <span class="tele-lbl">รันโค้ดสดบนเบราว์เซอร์</span>
+              </div>
+            </div>
+
+            <div class="showcase-creator-tag">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+              <span>DEVELOPED &amp; ARCHITECTED BY <b>PANUWICH</b></span>
             </div>
           </div>
 
-          <div class="auth-field">
-            <label for="auth-login-pass">รหัสผ่าน (Password)</label>
-            <div class="auth-input-wrap">
-              <span class="auth-input-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </span>
-              <input type="password" id="auth-login-pass" placeholder="กรอกรหัสผ่านของคุณ" autocomplete="current-password" required />
-              <button type="button" class="auth-eye-btn" id="auth-eye-login" title="ดู/ซ่อนรหัสผ่าน" aria-label="Toggle password visibility">
-                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <!-- RIGHT CHAMBER: Sleek Terminal Access Console -->
+          <div class="auth-console-chamber">
+            <div class="auth-header">
+              <div class="auth-brand-badge">
+                <span class="auth-pill-tag">
+                  <span class="auth-pill-dot"></span> STUDIO ACCESS TERMINAL
+                </span>
+              </div>
+
+              <h2 class="auth-title">MotionLab <span class="gradient-text">ESP32 Studio</span></h2>
+              <p class="auth-subtitle">ระบบจำลองฮาร์ดแวร์และเขียนโค้ดไมโครคอนโทรลเลอร์ 3D</p>
+            </div>
+
+            <div class="auth-tabs">
+              <button type="button" class="auth-tab is-active" id="auth-tab-login">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                <span>เข้าสู่ระบบ (Sign In)</span>
+              </button>
+              <button type="button" class="auth-tab" id="auth-tab-register">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <span>สมัครสมาชิก (Sign Up)</span>
               </button>
             </div>
-          </div>
 
-          <div class="auth-options-row">
-            <label class="auth-checkbox-label">
-              <input type="checkbox" id="auth-login-remember" checked />
-              <span>จดจำฉันไว้ในเครื่องนี้</span>
-            </label>
-            <a href="#" class="auth-link" id="auth-forgot-link">ลืมรหัสผ่าน?</a>
-          </div>
+            <!-- Form Error Alert -->
+            <div class="auth-alert" id="auth-alert" style="display:none;"></div>
 
-          <button type="submit" class="auth-submit-btn primary">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-            <span>เข้าสู่ระบบทันที</span>
-            <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
-
-          <div class="auth-divider">
-            <span>หรือเข้าสู่ระบบแบบด่วน (1-Click Demo)</span>
-          </div>
-
-          <div class="auth-quick-logins">
-            <button type="button" class="auth-quick-btn dev" id="auth-quick-panuwich">
-              <span class="quick-avatar-pill dev">PW</span>
-              <div class="quick-info">
-                <b>Panuwich</b>
-                <small>Lead Dev (Creator)</small>
+            <!-- TAB 1: LOGIN -->
+            <form class="auth-form" id="auth-form-login">
+              <div class="auth-field">
+                <label for="auth-login-user">ชื่อผู้ใช้หรืออีเมล (Username / Email)</label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </span>
+                  <input type="text" id="auth-login-user" placeholder="เช่น panuwich หรือ student" autocomplete="username" required />
+                </div>
               </div>
-              <span class="quick-badge">DEV</span>
-            </button>
 
-            <button type="button" class="auth-quick-btn student" id="auth-quick-student">
-              <span class="quick-avatar-pill student">EX</span>
-              <div class="quick-info">
-                <b>ESP32 Explorer</b>
-                <small>IoT Student / Maker</small>
+              <div class="auth-field">
+                <label for="auth-login-pass">รหัสผ่าน (Password)</label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input type="password" id="auth-login-pass" placeholder="กรอกรหัสผ่านของคุณ" autocomplete="current-password" required />
+                  <button type="button" class="auth-eye-btn" id="auth-eye-login" title="ดู/ซ่อนรหัสผ่าน" aria-label="Toggle password visibility">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
               </div>
-              <span class="quick-badge">DEMO</span>
-            </button>
-          </div>
 
-          <div class="auth-guest-row">
-            <button type="button" class="auth-guest-btn" id="auth-guest-btn">
-              <span>ข้ามไปใช้งานแบบผู้เยี่ยมชม (Guest Mode)</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
-            <div class="auth-security-tag">
-              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>Simulated Hardware Environment • Panuwich Edition</span>
-            </div>
-          </div>
-        </form>
+              <div class="auth-options-row">
+                <label class="auth-checkbox-label">
+                  <input type="checkbox" id="auth-login-remember" checked />
+                  <span>จดจำฉันไว้ในเครื่องนี้</span>
+                </label>
+                <a href="#" class="auth-link" id="auth-forgot-link">ลืมรหัสผ่าน?</a>
+              </div>
 
-        <!-- TAB 2: REGISTER -->
-        <form class="auth-form" id="auth-form-register" style="display:none;">
-          <div class="auth-field">
-            <label for="auth-reg-name">ชื่อ-นามสกุล หรือชื่อเรียกที่ต้องการแสดง</label>
-            <div class="auth-input-wrap">
-              <span class="auth-input-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              </span>
-              <input type="text" id="auth-reg-name" placeholder="เช่น ภานุวิชญ์ หรือ วิศวกรสายฮาร์ดแวร์" required />
-            </div>
-          </div>
-
-          <div class="auth-field">
-            <label for="auth-reg-user">ชื่อผู้ใช้ (Username ภาษาอังกฤษ 3 ตัวขึ้นไป)</label>
-            <div class="auth-input-wrap">
-              <span class="auth-input-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </span>
-              <input type="text" id="auth-reg-user" placeholder="เช่น tonkar293 หรือ maker01" required />
-            </div>
-          </div>
-
-          <div class="auth-field">
-            <label for="auth-reg-email">อีเมล (ถ้ามี)</label>
-            <div class="auth-input-wrap">
-              <span class="auth-input-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              </span>
-              <input type="email" id="auth-reg-email" placeholder="name@example.com" />
-            </div>
-          </div>
-
-          <div class="auth-field">
-            <label for="auth-reg-pass">รหัสผ่าน (อย่างน้อย 4 ตัวอักษร)</label>
-            <div class="auth-input-wrap">
-              <span class="auth-input-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </span>
-              <input type="password" id="auth-reg-pass" placeholder="กำหนดรหัสผ่าน" required />
-              <button type="button" class="auth-eye-btn" id="auth-eye-reg" title="ดู/ซ่อนรหัสผ่าน" aria-label="Toggle password visibility">
-                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <button type="submit" class="auth-submit-btn primary">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                <span>เข้าสู่ระบบทันที</span>
+                <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </button>
-            </div>
-          </div>
 
-          <button type="submit" class="auth-submit-btn secondary">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-            <span>สร้างบัญชีและเข้าสู่ระบบทันที</span>
-            <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
+              <div class="auth-divider">
+                <span>หรือเข้าสู่ระบบแบบด่วน (1-Click Demo)</span>
+              </div>
 
-          <div class="auth-guest-row" style="margin-top: 8px;">
-            <button type="button" class="auth-guest-btn" id="auth-back-to-login">
-              มีบัญชีอยู่แล้ว? กดที่นี่เพื่อเข้าสู่ระบบ
-            </button>
+              <div class="auth-quick-logins">
+                <button type="button" class="auth-quick-btn dev" id="auth-quick-panuwich">
+                  <span class="quick-avatar-pill dev">PW</span>
+                  <div class="quick-info">
+                    <b>Panuwich</b>
+                    <small>Lead Dev (Creator)</small>
+                  </div>
+                  <span class="quick-badge">DEV</span>
+                </button>
+
+                <button type="button" class="auth-quick-btn student" id="auth-quick-student">
+                  <span class="quick-avatar-pill student">EX</span>
+                  <div class="quick-info">
+                    <b>ESP32 Explorer</b>
+                    <small>IoT Student / Maker</small>
+                  </div>
+                  <span class="quick-badge">DEMO</span>
+                </button>
+              </div>
+
+              <div class="auth-guest-row">
+                <button type="button" class="auth-guest-btn" id="auth-guest-btn">
+                  <span>ข้ามไปใช้งานแบบผู้เยี่ยมชม (Guest Mode)</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+                <div class="auth-security-tag">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>Simulated Hardware Environment • Panuwich Edition</span>
+                </div>
+              </div>
+            </form>
+
+            <!-- TAB 2: REGISTER -->
+            <form class="auth-form" id="auth-form-register" style="display:none;">
+              <div class="auth-field">
+                <label for="auth-reg-name">ชื่อ-นามสกุล หรือชื่อเรียกที่ต้องการแสดง</label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  </span>
+                  <input type="text" id="auth-reg-name" placeholder="เช่น ภานุวิชญ์ หรือ วิศวกรสายฮาร์ดแวร์" required />
+                </div>
+              </div>
+
+              <div class="auth-field">
+                <label for="auth-reg-user">ชื่อผู้ใช้ (Username ภาษาอังกฤษ 3 ตัวขึ้นไป)</label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </span>
+                  <input type="text" id="auth-reg-user" placeholder="เช่น tonkar293 หรือ maker01" required />
+                </div>
+              </div>
+
+              <div class="auth-field">
+                <label for="auth-reg-email">อีเมล (ถ้ามี)</label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </span>
+                  <input type="email" id="auth-reg-email" placeholder="name@example.com" />
+                </div>
+              </div>
+
+              <div class="auth-field">
+                <label for="auth-reg-pass">รหัสผ่าน (อย่างน้อย 4 ตัวอักษร)</label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input type="password" id="auth-reg-pass" placeholder="กำหนดรหัสผ่าน" required />
+                  <button type="button" class="auth-eye-btn" id="auth-eye-reg" title="ดู/ซ่อนรหัสผ่าน" aria-label="Toggle password visibility">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="auth-submit-btn secondary">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <span>สร้างบัญชีและเข้าสู่ระบบทันที</span>
+                <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+
+              <div class="auth-guest-row" style="margin-top: 8px;">
+                <button type="button" class="auth-guest-btn" id="auth-back-to-login">
+                  มีบัญชีอยู่แล้ว? กดที่นี่เพื่อเข้าสู่ระบบ
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     `;
     document.body.appendChild(authModalBg);
